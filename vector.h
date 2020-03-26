@@ -4,12 +4,14 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include "ChaveItem.h"
+#include <iostream>
+#include "chaveItem.h"
+#include "symbolTable.h"
 
 // DECLARAÇÃO DAS CLASSES
 
-template <typename Chave, typename Item>
-class vetor {
+template <typename Chave = MyString, typename Item = int>
+class vetor : public SymbolTable<Chave, Item> {
   private:
 	Par<Chave, Item> *v; // O vetor de elementos
 	int capacidade;      // A capacidade máxima do vetor
@@ -23,10 +25,11 @@ class vetor {
 	void remove(Chave chave);
 	int rank(Chave chave);
 	Chave seleciona(int k);
+	void imprime();
 };
 
-template <typename Chave, typename Item>
-class vetor_ordenado {
+template <typename Chave = MyString, typename Item = int>
+class vetor_ordenado : public SymbolTable<Chave, Item> {
   private:
 	Par<Chave, Item> *v; // O vetor de elementos
 	int capacidade;      // A capacidade máxima do vetor
@@ -41,6 +44,7 @@ class vetor_ordenado {
 	void remove(Chave chave);
 	int rank(Chave chave);
 	Chave seleciona(int k);
+	void imprime();
 };
 
 // IMPLEMENTAÇÃO VETOR
@@ -58,10 +62,7 @@ vetor<Chave, Item>::~vetor() {
 template <typename Chave, typename Item>
 void vetor<Chave, Item>::resize() {
 	Par<Chave, Item> *novo = new Par<Chave, Item>[ 2 * capacidade ];
-	for (int i = 0; i < capacidade; i++) {
-		novo[i].chave = v[i].chave;
-		novo[i].valor = v[i].valor;
-	}
+	for (int i = 0; i < capacidade; i++) novo[i] = v[i];
 	delete[] v;
 	v = novo;
 	capacidade *= 2;
@@ -69,9 +70,16 @@ void vetor<Chave, Item>::resize() {
 
 template <typename Chave, typename Item>
 void vetor<Chave, Item>::insere(Chave chave, Item valor) {
+	// Primeiro procuramos se a chave já não está no vetor
+	for (int i = 0; i < numElem; i++)
+		if (v[i].chave == chave) {
+			v[i].chavesIguais((Par<Chave, Item>){ chave, valor });
+			return;
+		}
+	// Usamos a função definida em Par quando temos chaves iguais
+
 	if (numElem == capacidade) resize();
-	v[numElem].valor = valor;
-	v[numElem].chave = chave;
+	v[numElem] = (Par<Chave, Item>){ chave, valor };
 	numElem++;
 }
 
@@ -91,10 +99,7 @@ void vetor<Chave, Item>::remove(Chave chave) {
 		;
 	if (i == -1) return; // não há o que remover
 
-	for (; i <= numElem - 2; i++) {
-		v[i].chave = v[i + 1].chave;
-		v[i].valor = v[i + 1].valor;
-	}
+	for (; i <= numElem - 2; i++) v[i] = v[i + 1];
 	numElem--;
 }
 
@@ -115,6 +120,13 @@ Chave vetor<Chave, Item>::seleciona(int k) {
 	// retornar nada mesmo)
 }
 
+template <typename Chave, typename Item>
+void vetor<Chave, Item>::imprime() {
+	std::cout << "Vetor: [\n";
+	for (int i = 0; i < this->numElem; i++) std::cout << v[i] << "\n";
+	std::cout << "]" << std::endl;
+}
+
 // IMPLEMENTAÇÃO VETOR_ORDENADO
 
 template <typename Chave, typename Item>
@@ -130,10 +142,7 @@ vetor_ordenado<Chave, Item>::~vetor_ordenado() {
 template <typename Chave, typename Item>
 void vetor_ordenado<Chave, Item>::resize() {
 	Par<Chave, Item> *novo = new Par<Chave, Item>[ 2 * capacidade ];
-	for (int i = 0; i < capacidade; i++) {
-		novo[i].chave = v[i].chave;
-		novo[i].valor = v[i].valor;
-	}
+	for (int i = 0; i < capacidade; i++) novo[i] = v[i];
 	delete[] v;
 	v = novo;
 	capacidade *= 2;
@@ -143,8 +152,7 @@ template <typename Chave, typename Item>
 void vetor_ordenado<Chave, Item>::insere(Chave chave, Item valor) {
 	// se a chave é maior que a maior chave, simplesmente inserimos no final
 	if (numElem == 0 || chave > v[numElem - 1].chave) {
-		v[numElem].chave = chave;
-		v[numElem].valor = valor;
+		v[numElem] = (Par<Chave, Item>){ chave, valor };
 		numElem++;
 		return;
 	}
@@ -157,7 +165,7 @@ void vetor_ordenado<Chave, Item>::insere(Chave chave, Item valor) {
 	while (l <= r) {
 		m = l + (r - l) / 2;
 		if (v[m].chave == chave) {
-			v[m].valor = valor;
+			v[m].chavesIguais((Par<Chave, Item>){ chave, valor });
 			return;
 		} else if (v[m].chave < chave)
 			l = m + 1;
@@ -168,12 +176,8 @@ void vetor_ordenado<Chave, Item>::insere(Chave chave, Item valor) {
 	// Queremos inserir em m, logo precisamos abrir esse espaço
 	if (numElem == capacidade) resize();
 
-	for (int i = numElem; i > m && i > 0; i--) {
-		v[i].chave = v[i - 1].chave;
-		v[i].valor = v[i - 1].valor;
-	}
-	v[m].chave = chave;
-	v[m].valor = valor;
+	for (int i = numElem; i > m && i > 0; i--) v[i] = v[i - 1];
+	v[m] = (Par<Chave, Item>){ chave, valor };
 	numElem++;
 }
 
@@ -214,10 +218,8 @@ void vetor_ordenado<Chave, Item>::remove(Chave chave) {
 	// Se m não é a chave que estamos buscando, então a chave não está presente
 	if (v[m].chave != chave) return;
 
-	for (; m <= numElem - 2; m++) {
-		v[m].chave = v[m + 1].chave;
-		v[m].valor = v[m + 1].valor;
-	}
+	for (; m <= numElem - 2; m++) v[m] = v[m + 1];
+
 	numElem--;
 }
 
@@ -242,6 +244,13 @@ int vetor_ordenado<Chave, Item>::rank(Chave chave) {
 template <typename Chave, typename Item>
 Chave vetor_ordenado<Chave, Item>::seleciona(int k) {
 	if (k >= 0 && k < numElem) return v[k].chave;
+}
+
+template <typename Chave, typename Item>
+void vetor_ordenado<Chave, Item>::imprime() {
+	std::cout << "Vetor: [\n";
+	for (int i = 0; i < this->numElem; i++) std::cout << v[i] << "\n";
+	std::cout << "]" << std::endl;
 }
 
 #endif // !VECTOR_H
