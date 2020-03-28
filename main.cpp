@@ -1,10 +1,15 @@
 #include <iostream>
+#include "arvoreBinaria.h"
 #include "list.h"
 #include "vector.h"
 
+#include <fstream>
+#include <istream>
+#include <sstream>
+
 using namespace std;
 
-lista_ordenada<> v;
+arvore_binaria<> v;
 
 MyString randomWord() {
 	string a = "";
@@ -79,15 +84,15 @@ void teste() {
 	cout << endl;
 
 	cout << "Inserindo" << endl;
-	for (int i = 0; i < 1000; i++) v.insere(randomWord(), rand() % 1000);
+	for (int i = 0; i < 1000000; i++) v.insere(randomWord(), rand() % 1000);
 	cout << "Removendo" << endl;
-	for (int i = 0; i < 3000; i++) v.remove(randomWord());
+	for (int i = 0; i < 3000000; i++) v.remove(randomWord());
 	cout << "Selecionando" << endl;
-	for (int i = 0; i < 100; i++) v.seleciona(rand() % 1000);
+	for (int i = 0; i < 1000000; i++) v.seleciona(rand() % 1000);
 	cout << "Devolvendo" << endl;
-	for (int i = 0; i < 3000; i++) v.devolve(randomWord());
+	for (int i = 0; i < 3000000; i++) v.devolve(randomWord());
 	cout << "Rankeando" << endl;
-	for (int i = 0; i < 3000; i++) v.rank(randomWord());
+	for (int i = 0; i < 3000000; i++) v.rank(randomWord());
 }
 
 int main(int argc, const char **argv) {

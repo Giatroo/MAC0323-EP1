@@ -1,7 +1,7 @@
 /* Um header com a estrutura Par, que possui uma chave e um item */
 
-#ifndef CHAVE_ITEM_H
-#define CHAVE_ITEM_H
+#ifndef _CHAVE_ITEM_H
+#define _CHAVE_ITEM_H
 
 #include "myString.h"
 
@@ -32,4 +32,4 @@ void Par<Chave, Item>::operator=(const Par<Chave, Item> &p) {
 	this->valor = p.valor;
 }
 
-#endif // !CHAVE_ITEM_H
+#endif // !_CHAVE_ITEM_H
