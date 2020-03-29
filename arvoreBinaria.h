@@ -36,6 +36,12 @@ class arvore_binaria : public SymbolTable<Chave, Item> {
 	// Função auxiliar do imprime
 	void imprimeRecursivo(no_arvore<Chave, Item> *);
 
+	// Função auxiliar do remove
+	no_arvore<Chave, Item> *removeRecursivo(no_arvore<Chave, Item> *, Chave, bool &);
+
+	// Função auxiliar do removeRecursivo
+	no_arvore<Chave, Item> *AchaMin(no_arvore<Chave, Item> *);
+
   public:
 	arvore_binaria();
 	~arvore_binaria();
@@ -156,7 +162,96 @@ Item arvore_binaria<Chave, Item>::devolve(Chave chave) {
 }
 
 template <typename Chave, typename Item>
-void arvore_binaria<Chave, Item>::remove(Chave chave) {}
+void arvore_binaria<Chave, Item>::remove(Chave chave) {
+	bool achou = false;
+	raiz = removeRecursivo(raiz, chave, achou);
+}
+
+template <typename Chave, typename Item>
+no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::removeRecursivo(
+    no_arvore<Chave, Item> *it, Chave chave, bool &achou) {
+	// Se é nulo
+	if (it == nullptr) {
+		// Chegamos aqui ou se a raiz era nula ou se descemos nossa árvore e ela não
+		// possuia essa chave
+		achou = false;
+		return nullptr;
+	}
+
+	if (chave < it->node->chave) {
+		// Se queremos remover alguém que está à esquerda
+		it->esq = removeRecursivo(it->esq, chave, achou);
+		if (it->esq != nullptr) it->esq->pai = it;
+		if (achou) it->numNosEsq--;
+	} else if (chave > it->node->chave) {
+		// Se queremos remover alguém que está à direita
+		it->dir = removeRecursivo(it->dir, chave, achou);
+		if (it->dir != nullptr) it->dir->pai = it;
+		if (achou) it->numNosDir--;
+	} else {
+		// Se achamos quem estamos tentando remover
+		achou = true;
+
+		// Caso 1: é uma folha
+		if (it->esq == nullptr && it->dir == nullptr) {
+			delete it;
+			it = nullptr;
+			return nullptr;
+		}
+		// Caso 2: tem apenas um filho
+		else if (it->esq == nullptr) {
+			no_arvore<Chave, Item> *lixo = it;
+			it->dir->pai = it->pai;
+			it = it->dir;    // it vira a subárvore direita
+			it->numNosDir--; // a sua subárvore direita agora tem um nó a menos
+			// (pois a raiz dela se tornou it)
+			delete lixo; // Deletamos o lixo
+		} else if (it->dir == nullptr) {
+			no_arvore<Chave, Item> *lixo = it;
+			it->esq->pai = it->pai;
+			it = it->esq;    // it vira a subárvore esquerda
+			it->numNosEsq--; // a sua subárvore esquerda agora tem um nó a menos
+			// (pois a raiz dela se tornou it)
+			delete lixo; // Deletamos o nó
+		}
+		// Caso 3: tem os dois filhos
+		else {
+			// Procuramos a menor chave na subárvore direita
+			// (o próximo inordem)
+			no_arvore<Chave, Item> *temp = AchaMin(it->dir);
+			// Sabemos que ele existe, pois it tem dois filhos
+
+			// Colocamos o próximo inordem no lugar no do que queríamos remover
+			it->node->chave = temp->node->chave;
+			it->node->valor = temp->node->valor;
+			it->numNosDir--;
+
+			// E agora o nosso problema é remover o nó do próximo inordem
+			// Torcemos para que a remoção se reduza a ou o caso 1 ou o caso 2
+			// mas se novamente cairmos no caso 3, vamos novamente ter que fazer
+			// o processo de substituir um nó pelo próximo inordem e chamar
+			// recursivamente a função de remover
+			it->dir = removeRecursivo(it->dir, temp->node->chave, achou);
+			if (it->dir != nullptr) it->dir->pai = it;
+
+			// (nesse caso, 'achou' é indiferente, pois, como já falei, temos certeza
+			// de que essa chave existe na nossa árvore)
+			// (ou seja, 'achou' continua como true)
+		}
+	}
+
+	return it; // Retornamos a nova raiz dessa subárvore
+}
+
+template <typename Chave, typename Item>
+no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::AchaMin(
+    no_arvore<Chave, Item> *it) {
+	// Para achar o menor elemento de uma árvore, basta ir para a esquerda o máximo
+	// posível
+
+	while (it != nullptr && it->esq != nullptr) it = it->esq;
+	return it; // Ao final, temos o menor elemento da árvore
+}
 
 template <typename Chave, typename Item>
 int arvore_binaria<Chave, Item>::rank(Chave chave) {
@@ -215,7 +310,7 @@ void arvore_binaria<Chave, Item>::imprimeRecursivo(no_arvore<Chave, Item> *raiz)
 
 		// Imprimimos in-ordem
 		imprimeRecursivo(raiz->esq);
-		std::cout << *raiz->node << "\n";
+		std::cout << *raiz->node << std::endl;
 		imprimeRecursivo(raiz->dir);
 	}
 }

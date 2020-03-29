@@ -9,7 +9,7 @@
 
 using namespace std;
 
-arvore_binaria<> v;
+lista<> v;
 
 MyString randomWord() {
 	string a = "";
@@ -19,8 +19,35 @@ MyString randomWord() {
 	return (MyString)a;
 }
 
+void teste();
+void testeInicial();
+void testeInsere(int num_op);
+void testeRemove(int num_op);
+void testeDevolve(int num_op);
+void testeSeleciona(int num_op);
+void testeRank(int num_op);
+void testeAleatorizado(int num_op);
+
+// ******** MAIN ********
+
+int main(int argc, const char **argv) {
+	teste();
+
+	return 0;
+}
+
 void teste() {
 	srand(time(NULL));
+
+	testeInicial();
+	testeInsere(100000);
+	testeRank(100000);
+	testeSeleciona(3000);
+	testeDevolve(100000);
+	testeRemove(100000);
+	testeAleatorizado(500000);
+}
+void testeInicial() {
 	v.remove((MyString) "a");
 	v.remove((MyString) "b");
 	v.insere((MyString) "a", 1);
@@ -83,20 +110,131 @@ void teste() {
 	v.imprime();
 	cout << endl;
 
-	cout << "Inserindo" << endl;
-	for (int i = 0; i < 1000000; i++) v.insere(randomWord(), rand() % 1000);
-	cout << "Removendo" << endl;
-	for (int i = 0; i < 3000000; i++) v.remove(randomWord());
-	cout << "Selecionando" << endl;
-	for (int i = 0; i < 1000000; i++) v.seleciona(rand() % 1000);
-	cout << "Devolvendo" << endl;
-	for (int i = 0; i < 3000000; i++) v.devolve(randomWord());
-	cout << "Rankeando" << endl;
-	for (int i = 0; i < 3000000; i++) v.rank(randomWord());
+	v.insere((MyString) "aaa", 2);
+	v.insere((MyString) "aba", 2);
+	v.insere((MyString) "aab", 2);
+	v.insere((MyString) "baa", 2);
+
+	v.imprime();
+	cout << endl;
+
+	v.remove((MyString) "a");
+	v.remove((MyString) "aba");
+	v.remove((MyString) "ola");
+
+	v.imprime();
+	cout << endl;
 }
+void testeInsere(int num_op) {
+	clock_t start, end;
+	double elapsed, media;
+	media = 0;
 
-int main(int argc, const char **argv) {
-	teste();
+	cout << "Inserindo...";
+	cout.flush();
 
-	return 0;
+	start = clock();
+	for (int i = 0; i < num_op; i++) v.insere(randomWord(), rand() % 1000);
+	end = clock();
+
+	elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
+	media = elapsed / num_op;
+	cout << " - Média: " << media << " segundos por operação"
+	     << " - Total: " << elapsed << " segundos" << endl;
+}
+void testeRemove(int num_op) {
+	clock_t start, end;
+	double elapsed, media;
+	media = 0;
+
+	cout << "Removendo...";
+	cout.flush();
+
+	start = clock();
+	for (int i = 0; i < num_op; i++) v.remove(randomWord());
+	end = clock();
+
+	elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
+	media = elapsed / num_op;
+	cout << " - Média: " << media << " segundos por operação"
+	     << " - Total: " << elapsed << " segundos" << endl;
+}
+void testeDevolve(int num_op) {
+	clock_t start, end;
+	double elapsed, media;
+	media = 0;
+
+	cout << "Devolvendo...";
+	cout.flush();
+
+	start = clock();
+	for (int i = 0; i < num_op; i++) v.devolve(randomWord());
+	end = clock();
+
+	elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
+	media = elapsed / num_op;
+	cout << " - Média: " << media << " segundos por operação"
+	     << " - Total: " << elapsed << " segundos" << endl;
+}
+void testeSeleciona(int num_op) {
+	clock_t start, end;
+	double elapsed, media;
+	media = 0;
+
+	cout << "Selecionando...";
+	cout.flush();
+
+	start = clock();
+	for (int i = 0; i < num_op; i++) v.seleciona(rand() % 1000);
+	end = clock();
+
+	elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
+	media = elapsed / num_op;
+	cout << " - Média: " << media << " segundos por operação"
+	     << " - Total: " << elapsed << " segundos" << endl;
+}
+void testeRank(int num_op) {
+	clock_t start, end;
+	double elapsed, media;
+	media = 0;
+
+	cout << "Rankeando...";
+	cout.flush();
+
+	start = clock();
+	for (int i = 0; i < num_op; i++) v.rank(randomWord());
+	end = clock();
+
+	elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
+	media = elapsed / num_op;
+	cout << " - Média: " << media << " segundos por operação"
+	     << " - Total: " << elapsed << " segundos" << endl;
+}
+void testeAleatorizado(int num_op) {
+	clock_t start, end;
+	double elapsed, media;
+	media = 0;
+
+	cout << "Operações aleatórias...";
+	cout.flush();
+	int operacao;
+
+	start = clock();
+	for (int i = 0; i < num_op; i++) {
+		operacao = rand() % 5;
+		switch (operacao) {
+			case 0: v.insere(randomWord(), rand() % 1000); break;
+			case 1: v.remove(randomWord()); break;
+			case 2: v.seleciona(rand() % 1000); break;
+			case 3: v.devolve(randomWord()); break;
+			case 4: v.rank(randomWord()); break;
+			default: break;
+		}
+	}
+	end = clock();
+
+	elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
+	media = elapsed / num_op;
+	cout << " - Média: " << media << " segundos por operação"
+	     << " - Total: " << elapsed << " segundos" << endl;
 }
