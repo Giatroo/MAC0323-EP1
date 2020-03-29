@@ -3,7 +3,7 @@
 #ifndef _CHAVE_ITEM_H
 #define _CHAVE_ITEM_H
 
-#include "myString.h"
+#include "myString.hpp"
 
 template <typename Chave = MyString, typename Item = int>
 class Par {

@@ -5,8 +5,8 @@
 #define _ARVORE_BINARIA_H
 
 #include <iostream>
-#include "chaveItem.h"
-#include "symbolTable.h"
+#include "chaveItem.hpp"
+#include "symbolTable.hpp"
 
 // DECLARAÇÃO DAS CLASSES
 
@@ -40,7 +40,7 @@ class arvore_binaria : public SymbolTable<Chave, Item> {
 	no_arvore<Chave, Item> *removeRecursivo(no_arvore<Chave, Item> *, Chave, bool &);
 
 	// Função auxiliar do removeRecursivo
-	no_arvore<Chave, Item> *AchaMin(no_arvore<Chave, Item> *);
+	no_arvore<Chave, Item> *achaMin(no_arvore<Chave, Item> *);
 
   public:
 	arvore_binaria();
@@ -150,7 +150,7 @@ void arvore_binaria<Chave, Item>::insere(Chave chave, Item valor) {
 
 template <typename Chave, typename Item>
 Item arvore_binaria<Chave, Item>::devolve(Chave chave) {
-	no_arvore<Chave, Item> *it; // iteradores
+	no_arvore<Chave, Item> *it; // iterador
 
 	it = raiz;
 	while (it != nullptr && it->node->chave != chave)
@@ -218,7 +218,7 @@ no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::removeRecursivo(
 		else {
 			// Procuramos a menor chave na subárvore direita
 			// (o próximo inordem)
-			no_arvore<Chave, Item> *temp = AchaMin(it->dir);
+			no_arvore<Chave, Item> *temp = achaMin(it->dir);
 			// Sabemos que ele existe, pois it tem dois filhos
 
 			// Colocamos o próximo inordem no lugar no do que queríamos remover
@@ -244,7 +244,7 @@ no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::removeRecursivo(
 }
 
 template <typename Chave, typename Item>
-no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::AchaMin(
+no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::achaMin(
     no_arvore<Chave, Item> *it) {
 	// Para achar o menor elemento de uma árvore, basta ir para a esquerda o máximo
 	// posível

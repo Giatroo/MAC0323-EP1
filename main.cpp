@@ -1,15 +1,12 @@
 #include <iostream>
-#include "arvoreBinaria.h"
-#include "list.h"
-#include "vector.h"
-
-#include <fstream>
-#include <istream>
-#include <sstream>
+#include "arvoreBinaria.hpp"
+#include "list.hpp"
+#include "treap.hpp"
+#include "vector.hpp"
 
 using namespace std;
 
-lista<> v;
+treap<> v;
 
 MyString randomWord() {
 	string a = "";
@@ -40,12 +37,12 @@ void teste() {
 	srand(time(NULL));
 
 	testeInicial();
-	testeInsere(100000);
-	testeRank(100000);
-	testeSeleciona(3000);
-	testeDevolve(100000);
-	testeRemove(100000);
-	testeAleatorizado(500000);
+	// testeInsere(100000);
+	// testeRank(100000);
+	// testeSeleciona(3000);
+	// testeDevolve(100000);
+	// testeRemove(100000);
+	// testeAleatorizado(500000);
 }
 void testeInicial() {
 	v.remove((MyString) "a");

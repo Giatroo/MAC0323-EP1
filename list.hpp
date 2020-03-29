@@ -2,8 +2,8 @@
 #define _LIST_H
 
 #include <iostream>
-#include "chaveItem.h"
-#include "symbolTable.h"
+#include "chaveItem.hpp"
+#include "symbolTable.hpp"
 
 // DECLARAÇÃO DAS CLASSES
 
