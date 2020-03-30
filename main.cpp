@@ -6,7 +6,7 @@
 
 using namespace std;
 
-treap<> v;
+vetor<> v;
 
 MyString randomWord() {
 	string a = "";
@@ -37,12 +37,12 @@ void teste() {
 	srand(time(NULL));
 
 	testeInicial();
-	// testeInsere(100000);
-	// testeRank(100000);
-	// testeSeleciona(3000);
-	// testeDevolve(100000);
-	// testeRemove(100000);
-	// testeAleatorizado(500000);
+	testeInsere(10000);
+	testeRank(10000);
+	testeSeleciona(1000);
+	testeDevolve(10000);
+	testeRemove(10000);
+	testeAleatorizado(50000);
 }
 void testeInicial() {
 	v.remove((MyString) "a");
