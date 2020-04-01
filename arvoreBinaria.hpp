@@ -256,7 +256,7 @@ no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::achaMin(
 template <typename Chave, typename Item>
 int arvore_binaria<Chave, Item>::rank(Chave chave) {
 	int menores;
-	no_arvore<Chave, Item> *it; // iteradores
+	no_arvore<Chave, Item> *it; // iterador
 	it = raiz;                  // o iterador atual
 	menores = 0;
 
@@ -276,7 +276,7 @@ int arvore_binaria<Chave, Item>::rank(Chave chave) {
 
 template <typename Chave, typename Item>
 Chave arvore_binaria<Chave, Item>::seleciona(int k) {
-	no_arvore<Chave, Item> *it; // iteradores
+	no_arvore<Chave, Item> *it; // iterador
 	it = raiz;                  // o iterador atual
 	int rank;                   // o rank do nó atual
 
