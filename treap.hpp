@@ -1,5 +1,5 @@
-/* Arquivo com implementação de uma tabela de símbolos via vetor comum e vetor
- * ordenado */
+/* Implementação de uma tabela de símbolos via treap
+ */
 
 #ifndef _TREAP_H
 #define _TREAP_H
@@ -15,7 +15,7 @@ class no_treap {
   public:
 	Par<Chave, Item> *node;     // O nó em si
 	int prioridade;             // A prioridade do nó
-	no_treap<Chave, Item> *esq; // Filho direito
+	no_treap<Chave, Item> *esq; // Filho esquerda
 	no_treap<Chave, Item> *dir; // Filho direito
 	int numNosEsq;              // Números de nós na subárvore esquerda
 	int numNosDir;              // Número de nós na subárvore direita
@@ -181,6 +181,8 @@ Item treap<Chave, Item>::devolve(Chave chave) {
 	// Se chegamos aqui, ou it é nulo ou achamos it
 	if (it != nullptr) return it->node->valor;
 	// Retornamos apenas se não for nulo
+
+	return {};
 }
 
 template <typename Chave, typename Item>
@@ -311,6 +313,8 @@ Chave treap<Chave, Item>::seleciona(int k) {
 			if (it != nullptr) rank += (1 + it->numNosEsq);
 		}
 	}
+
+	return {};
 }
 
 template <typename Chave, typename Item>

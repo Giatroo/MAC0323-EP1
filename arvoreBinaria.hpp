@@ -1,5 +1,5 @@
-/* Arquivo com implementação de uma tabela de símbolos via vetor comum e vetor
- * ordenado */
+/* Implementação de uma tabela de símbolos via árvores binárias de busca
+ */
 
 #ifndef _ARVORE_BINARIA_H
 #define _ARVORE_BINARIA_H
@@ -14,7 +14,7 @@ template <typename Chave = MyString, typename Item = int>
 class no_arvore {
   public:
 	Par<Chave, Item> *node;      // O nó em si
-	no_arvore<Chave, Item> *esq; // Filho direito
+	no_arvore<Chave, Item> *esq; // Filho esquerdo
 	no_arvore<Chave, Item> *dir; // Filho direito
 	no_arvore<Chave, Item> *pai; // O pai
 	int numNosEsq;               // Números de nós na subárvore esquerda
@@ -159,6 +159,8 @@ Item arvore_binaria<Chave, Item>::devolve(Chave chave) {
 	// Se chegamos aqui, ou it é nulo ou achamos it
 	if (it != nullptr) return it->node->valor;
 	// Retornamos apenas se não for nulo
+
+	return {};
 }
 
 template <typename Chave, typename Item>
@@ -293,6 +295,8 @@ Chave arvore_binaria<Chave, Item>::seleciona(int k) {
 			if (it != nullptr) rank += (1 + it->numNosEsq);
 		}
 	}
+
+	return {};
 }
 
 template <typename Chave, typename Item>

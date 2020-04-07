@@ -88,8 +88,10 @@ Item vetor<Chave, Item>::devolve(Chave chave) {
 	int i;
 	for (i = numElem - 1; i >= 0 && v[i].chave != chave; i--)
 		;
-	// Compilador dá um warming, mas se não achamos chave é não há o que fazer
+
 	if (i != -1) return v[i].valor;
+
+	return {};
 }
 
 template <typename Chave, typename Item>
@@ -115,9 +117,8 @@ template <typename Chave, typename Item>
 Chave vetor<Chave, Item>::seleciona(int k) {
 	for (int i = 0; i < numElem; i++)
 		if (rank(v[i].chave) == k) return v[i].chave;
-	// Novamente o compilador vai reclamar, mas as únicas opções para esse método não
-	// retornar nada é caso k < 0 ou k >= numElem (que são casos que não queremos
-	// retornar nada mesmo)
+
+	return {};
 }
 
 template <typename Chave, typename Item>
@@ -151,7 +152,7 @@ void vetor_ordenado<Chave, Item>::resize() {
 template <typename Chave, typename Item>
 void vetor_ordenado<Chave, Item>::insere(Chave chave, Item valor) {
 	// se a chave é maior que a maior chave, simplesmente inserimos no final
-	if (numElem == 0 || chave > v[numElem - 1].chave) {
+	if (numElem == 0 || (numElem < capacidade && chave > v[numElem - 1].chave)) {
 		v[numElem] = (Par<Chave, Item>){ chave, valor };
 		numElem++;
 		return;
@@ -196,7 +197,9 @@ Item vetor_ordenado<Chave, Item>::devolve(Chave chave) {
 		else
 			r = m - 1;
 	}
+
 	// Se o código chega até aqui significa que a chave não está presente
+	return {};
 }
 
 template <typename Chave, typename Item>
@@ -244,6 +247,8 @@ int vetor_ordenado<Chave, Item>::rank(Chave chave) {
 template <typename Chave, typename Item>
 Chave vetor_ordenado<Chave, Item>::seleciona(int k) {
 	if (k >= 0 && k < numElem) return v[k].chave;
+
+	return {};
 }
 
 template <typename Chave, typename Item>

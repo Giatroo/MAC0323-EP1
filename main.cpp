@@ -2,15 +2,16 @@
 #include "arvoreBinaria.hpp"
 #include "list.hpp"
 #include "treap.hpp"
+#include "tree23.hpp"
 #include "vector.hpp"
 
 using namespace std;
 
-treap<> st;
+arvore23<> st;
 
 MyString randomWord() {
 	string a = "";
-	int len = (rand() % 10) + 1;
+	int len = (rand() % 5) + 1;
 	a.resize(len);
 	for (int i = 0; i < len; i++) a[i] = (rand() % ('z' - 'a' + 1)) + 'a';
 	return (MyString)a;
@@ -27,8 +28,95 @@ void testeAleatorizado(int num_op);
 
 // ******** MAIN ********
 
+void testeSplit() {
+	arvore23<> a;
+	no_arvore23<> *n = new no_arvore23<>((Par<>){ (MyString) "Hello", 3 },
+	                                     (Par<>){ (MyString) "Mundo", 1 });
+	a.raiz = n;
+
+	a.imprime();
+
+	cout << endl;
+
+	cout << *a.raiz->node1 << endl;
+	cout << *a.raiz->node2 << endl;
+	cout << a.raiz->esq << endl;
+	cout << a.raiz->meio << endl;
+	cout << a.raiz->dir << endl;
+
+	cout << endl;
+
+	a.raiz = a.split(a.raiz, ((Par<>){ (MyString) "Ola", 1 }));
+
+	a.imprime();
+
+	cout << endl;
+
+	cout << *a.raiz->node1 << endl;
+	// cout << *a.raiz->node2 << endl;
+	cout << a.raiz->esq << endl;
+	cout << a.raiz->meio << endl;
+	cout << a.raiz->dir << endl;
+}
+
+void testeInsere() {
+	arvore23<> a;
+	no_arvore23<> *n = new no_arvore23<>((Par<>){ (MyString) "hello", 3 });
+
+	a.raiz = n;
+	a.raiz->insere((Par<>){ (MyString) "ola", 2 });
+	a.imprime();
+
+	a.raiz = a.split(a.raiz, (Par<>){ (MyString) "aac", 2 });
+	a.imprime();
+
+	a.raiz->esq->insere((Par<>){ (MyString) "aaa", 3 });
+	a.imprime();
+
+	a.raiz->esq = a.split(a.raiz->esq, (Par<>){ (MyString) "aab", 1 });
+	a.imprime();
+
+	cout << *a.raiz->esq->node1 << endl;
+
+	a.raiz->insere(a.raiz->esq);
+	a.imprime();
+
+	// cout << endl;
+	// cout << "[ " << *a.raiz->node1 << " | " << *a.raiz->node2 << " ]" << endl;
+	// cout << "[ " << *a.raiz->esq->node1 << " | " << *a.raiz->esq->node2 << " ]"
+	//      << endl;
+	// cout << "[ " << *a.raiz->meio->node1 << " | " << *a.raiz->meio->node2 << " ]"
+	//      << endl;
+	// cout << "[ " << *a.raiz->dir->node1 << " | " << *a.raiz->dir->node2 << " ]"
+	//      << endl;
+
+	arvore23<> b;
+	n = new no_arvore23<>((Par<>){ (MyString) "world", 3 });
+	b.raiz = n;
+	b.raiz->insere((Par<>){ (MyString) "hi", 1 });
+
+	b.raiz = b.split(b.raiz, (Par<>){ (MyString) "zzz", 1 });
+	b.imprime();
+
+	b.raiz->dir->insere((Par<>){ (MyString) "zzc", 4 });
+	b.raiz->dir = b.split(b.raiz->dir, (Par<>){ (MyString) "zza", -5 });
+	b.raiz->insere(b.raiz->dir);
+	b.imprime();
+
+	// cout << endl;
+	// cout << "[ " << *b.raiz->node1 << " | " << *b.raiz->node2 << " ]" << endl;
+	// cout << "[ " << *b.raiz->esq->node1 << " | " << *b.raiz->esq->node2 << " ]"
+	//      << endl;
+	// cout << "[ " << *b.raiz->meio->node1 << " | " << *b.raiz->meio->node2 << " ]"
+	//      << endl;
+	// cout << "[ " << *b.raiz->dir->node1 << " | " << *b.raiz->dir->node2 << " ]"
+	//      << endl;
+}
+
 int main(int argc, const char **argv) {
 	teste();
+	// testeSplit();
+	// testeInsere();
 
 	return 0;
 }
@@ -37,12 +125,13 @@ void teste() {
 	srand(time(NULL));
 
 	testeInicial();
-	testeInsere(10000000);
-	testeRank(10000000);
-	testeSeleciona(10000000);
-	testeDevolve(10000000);
-	testeRemove(10000000);
-	testeAleatorizado(50000000);
+	testeInsere(100000);
+	testeRank(100000);
+	testeSeleciona(100000);
+	testeDevolve(100000);
+	testeRemove(100000);
+	testeAleatorizado(500000);
+	// st.imprime();
 }
 void testeInicial() {
 	st.remove((MyString) "a");
@@ -54,29 +143,31 @@ void testeInicial() {
 	cout << endl;
 
 	st.insere((MyString) "ola", 1);
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
 	st.insere((MyString) "mundo", 2);
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
 	st.insere((MyString) "sei lá", 10);
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
 	st.insere((MyString) "outra palavra", -23);
 	st.imprime();
 	cout << endl;
 
-	cout << st.devolve((MyString) "ola") << " " << st.devolve((MyString) "mundo");
+	cout << "devolve(ola) = " << st.devolve((MyString) "ola") << endl;
+	cout << "devolve(mundo) = " << st.devolve((MyString) "mundo") << endl;
 	cout << endl;
 
-	cout << st.devolve((MyString) "a") << " " << st.devolve((MyString) "b") << endl;
+	cout << "devolve(a) = " << st.devolve((MyString) "a") << endl;
+	cout << "devolve(b) = " << st.devolve((MyString) "b") << endl;
 	cout << endl;
 
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
 	cout << "rank(ola) = " << st.rank((MyString) "ola") << endl;
 	cout << "rank(sei lá) = " << st.rank((MyString) "sei lá") << endl;
@@ -88,18 +179,19 @@ void testeInicial() {
 	cout << "rank(zzzz) = " << st.rank((MyString) "zzzz") << endl;
 	cout << endl;
 
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
+	cout << "seleciona(4) = " << st.seleciona(4) << endl;
 	cout << "seleciona(3) = " << st.seleciona(3) << endl;
 	cout << "seleciona(2) = " << st.seleciona(2) << endl;
 	cout << "seleciona(1) = " << st.seleciona(1) << endl;
 	cout << "seleciona(0) = " << st.seleciona(0) << endl;
 
-	st.remove((MyString) "outra palavra");
-	cout << endl;
+	// st.remove((MyString) "outra palavra");
+	// cout << endl;
 
-	st.imprime();
+	// st.imprime();
 	cout << endl;
 
 	cout << "seleciona(7) = " << st.seleciona(7) << endl;
@@ -117,19 +209,27 @@ void testeInicial() {
 	cout << endl;
 
 	st.insere((MyString) "aaa", 2);
+	st.imprime();
+	cout << endl;
+
 	st.insere((MyString) "aba", 2);
+	st.imprime();
+	cout << endl;
+
 	st.insere((MyString) "aab", 2);
+	st.imprime();
+	cout << endl;
+
 	st.insere((MyString) "baa", 2);
-
 	st.imprime();
 	cout << endl;
 
-	st.remove((MyString) "a");
-	st.remove((MyString) "aba");
-	st.remove((MyString) "ola");
+	// st.remove((MyString) "a");
+	// st.remove((MyString) "aba");
+	// st.remove((MyString) "ola");
 
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 }
 void testeInsere(int num_op) {
 	clock_t start, end;
@@ -140,7 +240,7 @@ void testeInsere(int num_op) {
 	cout.flush();
 
 	start = clock();
-	for (int i = 0; i < num_op; i++) st.insere(randomWord(), rand() % 1000);
+	for (int i = 0; i < num_op; i++) st.insere(randomWord(), 1);
 	end = clock();
 
 	elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
@@ -191,7 +291,7 @@ void testeSeleciona(int num_op) {
 	cout.flush();
 
 	start = clock();
-	for (int i = 0; i < num_op; i++) st.seleciona(rand() % 1000);
+	for (int i = 0; i < num_op; i++) st.seleciona(rand() % num_op);
 	end = clock();
 
 	elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;

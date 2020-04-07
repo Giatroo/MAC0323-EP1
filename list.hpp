@@ -131,6 +131,8 @@ Item lista<Chave, Item>::devolve(Chave chave) {
 	}
 
 	// Se chegamos até aqui, é porque não achamos
+
+	return {};
 }
 
 template <typename Chave, typename Item>
@@ -182,6 +184,7 @@ Chave lista<Chave, Item>::seleciona(int k) {
 	}
 
 	// Se chegamos até aqui, é porque não existe chave
+	return {};
 }
 
 template <typename Chave, typename Item>
@@ -255,6 +258,8 @@ Item lista_ordenada<Chave, Item>::devolve(Chave chave) {
 
 	// Se for igual, retornamos o valor, se não, não retornamos nada
 	if (it != calda && it->node->chave == chave) return it->node->valor;
+
+	return {};
 }
 
 template <typename Chave, typename Item>
