@@ -70,6 +70,20 @@ class arvore23 : public SymbolTable<Chave, Item> {
 	no_arvore23<Chave, Item> *join(no_arvore23<Chave, Item> *a,
 	                               no_arvore23<Chave, Item> *b);
 
+	// Dados dois nós, a e b, onde b é filho de a e b teve um elemento removido,
+	// a função vê se algum dos irmãos adjacentes de b podem lhe emprestar um par
+	// Se sim, a função o faz e retorna true. Se não é possível, a função apenas
+	// retorna false
+	bool borrow(no_arvore23<Chave, Item> *, no_arvore23<Chave, Item> *);
+
+	// Dados dois nós, a e b, onde b é filho de a e b teve um elemento removido, mas
+	// não foi possível emprestar do irmão, precisamos que um par do pai desça para o
+	// irmão do filho removido. Se o pai era um 3-nó, então tudo certo, mas caso
+	// contrário, temos que avisar que o pai ficou vazio e precisamos seguir
+	// arrumando a árvore
+	no_arvore23<Chave, Item> *merge(no_arvore23<Chave, Item> *,
+	                                no_arvore23<Chave, Item> *);
+
   public:
 	arvore23();
 	~arvore23();
@@ -483,6 +497,119 @@ Item arvore23<Chave, Item>::devolve(Chave chave) {
 }
 
 template <typename Chave, typename Item>
+bool arvore23<Chave, Item>::borrow(no_arvore23<Chave, Item> *pai,
+                                   no_arvore23<Chave, Item> *filho) {
+	// primeiro, precisamos descobrir se o filho é da esquerda, meio ou direita
+	no_arvore23<Chave, Item> *irmao;
+
+	if (filho == pai->esq) {
+		// 1. O filho é filho esquerdo
+		if (pai->cheia()) {
+			// 1.1 Se o pai possiu três filhos, olhamos para o filho do meio
+			irmao = pai->meio;
+		} else {
+			// 1.2 Se o pai possui dois filhos, olhamos para o filho da direita
+			irmao = pai->dir;
+		}
+
+		if (!irmao->cheia()) // Se o irmão só possui um par
+			return false;    // Então não conseguimos emprestar e retornamos false
+
+		// Caso contrário, fazemos o empréstimo
+		filho->node1 = pai->node1;
+		pai->node1 = irmao->node1;
+		irmao->node1 = irmao->node2;
+		irmao->node2preenchido = false;
+		// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
+		if (filho->esq == nullptr) filho->esq = filho->dir;
+		filho->dir = irmao->esq;
+		irmao->esq = irmao->meio;
+
+	} else if (pai->cheia() && filho == pai->meio) {
+		// 2. O filho é filho do meio
+		if (!pai->esq->cheia() && !pai->dir->cheia())
+			return false; // Se não dos irmão está cheio, não dá pra emprestar
+
+		if (pai->esq->cheia()) {
+			// 2.1 Se o irmão esquerdo está cheio
+			irmao = pai->esq;
+			filho->node1 = pai->node1;
+			pai->node1 = irmao->node2;
+			irmao->node2preenchido = false;
+			// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
+			if (filho->dir == nullptr) filho->dir = filho->esq;
+			filho->esq = irmao->dir;
+		} else {
+			// 2.2 Se o irmão direito está cheio
+			irmao = pai->dir;
+			filho->node1 = pai->node2;
+			pai->node2 = irmao->node1;
+			irmao->node1 = irmao->node2;
+			irmao->node2preenchido = false;
+			// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
+			if (filho->esq == nullptr) filho->esq = filho->dir;
+			filho->dir = irmao->esq;
+			irmao->esq = irmao->meio;
+		}
+
+	} else {
+		// 3. O filho é filho direito
+		if (pai->cheia()) {
+			// 1.1 Se o pai possiu três filhos, olhamos para o filho do meio
+			irmao = pai->meio;
+		} else {
+			// 1.2 Se o pai possui dois filhos, olhamos para o filho da esquerda
+			irmao = pai->esq;
+		}
+
+		if (!irmao->cheia()) // Se o irmão só possui um par
+			return false;    // Então não conseguimos emprestar e retornamos false
+
+		if (pai->cheia()) {
+			filho->node1 = pai->node2;
+			pai->node2 = irmao->node2;
+		} else {
+			filho->node1 = pai->node1;
+			pai->node1 = irmao->node2;
+		}
+		irmao->node2preenchido = false;
+		// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
+		if (filho->dir == nullptr) filho->dir = filho->esq;
+		filho->esq = irmao->dir;
+		irmao->dir = irmao->meio;
+	}
+}
+
+template <typename Chave, typename Item>
+no_arvore23<Chave, Item> *arvore23<Chave, Item>::merge(
+    no_arvore23<Chave, Item> *pai, no_arvore23<Chave, Item> *filho) {
+	no_arvore23<Chave, Item> *irmao;
+
+	if (filho == pai->esq) {
+		// 1. Se é o filho esquerdo
+
+		if (pai->cheia()) {
+			// 1.1 Se o pai é 3-nó
+			irmao = pai->meio;
+		} else {
+			irmao = pai->dir;
+		}
+
+		irmao->node2 = irmao->node1;
+		irmao->node2preenchido = true;
+		irmao->node1 = pai->node1;
+		// Se estamos em folha, terminado, se não, precisamos ajustar ponteiros
+		irmao->meio = irmao->esq;
+		irmao->esq = (filho->esq == nullptr) ? filho->dir : filho->esq;
+
+		// E finalmente deletamos o filho
+		delete filho;
+		pai->esq = nullptr;
+	} else if (pai->cheia() && filho == pai->meio) {
+	}
+}
+
+template <typename Chave, typename Item>
 void arvore23<Chave, Item>::remove(Chave chave) {}
 
 template <typename Chave, typename Item>
@@ -600,7 +727,8 @@ void arvore23<Chave, Item>::imprimeRecursivo(no_arvore23<Chave, Item> *raiz) {
 		// } else {
 		// 	std::cout << "null\n";
 		// }
-		// std::cout << "\tValores de nós em subárvores: " << raiz->numNosEsq << " "
+		// std::cout << "\tValores de nós em subárvores: " << raiz->numNosEsq <<
+		// " "
 		//           << raiz->numNosMeio << " " << raiz->numNosDir << "\n";
 
 		// imprimeRecursivo(raiz->esq);
