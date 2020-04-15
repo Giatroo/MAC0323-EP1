@@ -125,12 +125,12 @@ void teste() {
 	srand(time(NULL));
 
 	testeInicial();
-	// testeInsere(100000);
-	// testeRank(100000);
-	// testeSeleciona(100000);
-	// testeDevolve(100000);
-	// testeRemove(100000);
-	// testeAleatorizado(500000);
+	testeInsere(100000);
+	testeRank(100000);
+	testeSeleciona(100000);
+	testeDevolve(100000);
+	testeRemove(100000);
+	testeAleatorizado(500000);
 	// st.imprime();
 }
 void testeInicial() {
@@ -223,9 +223,21 @@ void testeInicial() {
 	st.imprime();
 	cout << endl;
 
-	st.remove((MyString) "a");
-	st.imprime();
-	cout << endl;
+	// st.remove((MyString) "a");
+	// st.imprime();
+	// cout << endl;
+
+	// st.remove((MyString) "aaa");
+	// st.imprime();
+	// cout << endl;
+
+	// st.remove((MyString) "aab");
+	// st.imprime();
+	// cout << endl;
+
+	// st.remove((MyString) "mundo");
+	// st.imprime();
+	// cout << endl;
 
 	st.remove((MyString) "aba");
 	st.imprime();
@@ -235,8 +247,20 @@ void testeInicial() {
 	st.imprime();
 	cout << endl;
 
+	// st.remove((MyString) "baa");
+	// st.imprime();
+	// cout << endl;
+
+	// st.remove((MyString) "aba");
+	// st.imprime();
+	// cout << endl;
+
+	st.remove((MyString) "sei lá");
 	st.imprime();
 	cout << endl;
+
+	// st.imprime();
+	// cout << endl;
 }
 void testeInsere(int num_op) {
 	clock_t start, end;

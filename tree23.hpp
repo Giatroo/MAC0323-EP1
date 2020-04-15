@@ -8,6 +8,8 @@
 #include "chaveItem.hpp"
 #include "symbolTable.hpp"
 
+using namespace std;
+
 // DECLARAÇÃO DAS CLASSES
 
 template <typename Chave = MyString, typename Item = int>
@@ -35,6 +37,7 @@ class no_arvore23 {
 	void insere(no_arvore23<Chave, Item> *); // Insere uma árvore nesse nó
 	                                         // essa árvore deve ser filha
 	                                         // do nó e ele deve ter apenas um par
+	void debug();
 };
 
 template <typename Chave = MyString, typename Item = int>
@@ -200,6 +203,54 @@ void no_arvore23<Chave, Item>::insere(no_arvore23<Chave, Item> *p) {
 	}
 	this->node2preenchido = true;
 	delete p;
+}
+
+template <typename Chave, typename Item>
+void no_arvore23<Chave, Item>::debug() {
+	std::cout << "[ " << *this->node1 << " | ";
+	if (this->cheia())
+		std::cout << *this->node2;
+	else
+		std::cout << " vazio ";
+	std::cout << " ]\t com filhos:\n";
+
+	std::cout << "\tEsq:  ";
+	if (this->esq) {
+		std::cout << "[ " << *this->esq->node1 << " | ";
+		if (this->esq->cheia())
+			std::cout << *this->esq->node2;
+		else
+			std::cout << " vazio ";
+		std::cout << " ]\n";
+	} else {
+		std::cout << "null\n";
+	}
+
+	std::cout << "\tMeio: ";
+	if (this->meio) {
+		std::cout << "[ " << *this->meio->node1 << " | ";
+		if (this->meio->cheia())
+			std::cout << *this->meio->node2;
+		else
+			std::cout << " vazio ";
+		std::cout << " ]\n";
+	} else {
+		std::cout << "null\n";
+	}
+
+	std::cout << "\tDir:  ";
+	if (this->dir) {
+		std::cout << "[ " << *this->dir->node1 << " | ";
+		if (this->dir->cheia())
+			std::cout << *this->dir->node2;
+		else
+			std::cout << " vazio ";
+		std::cout << " ]\n";
+	} else {
+		std::cout << "null\n";
+	}
+	std::cout << "\tValores de nós em subárvores: " << this->numNosEsq << " " << this->numNosMeio
+	          << " " << this->numNosDir << "\n";
 }
 
 // IMPLEMENTAÇÃO ARVORE23
@@ -680,6 +731,7 @@ void arvore23<Chave, Item>::merge(no_arvore23<Chave, Item> *pai, no_arvore23<Cha
 template <typename Chave, typename Item>
 no_arvore23<Chave, Item> *arvore23<Chave, Item>::achaMaior(no_arvore23<Chave, Item> *raiz) {
 	no_arvore23<Chave, Item> *it;
+	it = raiz;
 	while (it->dir != nullptr) it = it->dir;
 	return it;
 }
@@ -687,6 +739,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::achaMaior(no_arvore23<Chave, It
 template <typename Chave, typename Item>
 no_arvore23<Chave, Item> *arvore23<Chave, Item>::achaMenor(no_arvore23<Chave, Item> *raiz) {
 	no_arvore23<Chave, Item> *it;
+	it = raiz;
 	while (it->esq != nullptr) it = it->esq;
 	return it;
 }
@@ -738,6 +791,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::removeRecursivo(no_arvore23<Cha
 			}
 		}
 	} else if (chave == filho->node1->chave) {
+		achou = true;
 		if (filho->ehFolha()) {
 			// Se é folha, vemos se está cheia
 			if (filho->cheia())
@@ -758,14 +812,14 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::removeRecursivo(no_arvore23<Cha
 		} else {
 			// Se não é folha, precisamos procura o próximo e anterior inordem
 			no_arvore23<Chave, Item> *prox, *ant;
-			prox = achaMenor(pai->cheia() ? filho->meio : filho->dir);
+			prox = achaMenor(filho->cheia() ? filho->meio : filho->dir);
 			ant = achaMaior(filho->esq);
 			// E vemos se algum deles é 3-nó
 
 			if (prox->cheia()) {
 				*filho->node1 = *prox->node1;
-				removeRecursivo(filho, pai->cheia() ? filho->meio : filho->dir, prox->node1->chave,
-				                achou, diminuiu);
+				removeRecursivo(filho, filho->cheia() ? filho->meio : filho->dir,
+				                prox->node1->chave, achou, diminuiu);
 			} else if (ant->cheia()) {
 				*filho->node1 = *ant->node2;
 				removeRecursivo(filho, filho->esq, ant->node2->chave, achou, diminuiu);
@@ -812,6 +866,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::removeRecursivo(no_arvore23<Cha
 			}
 		}
 	} else if (filho->cheia() && chave == filho->node2->chave) {
+		achou = true;
 		if (filho->ehFolha()) {
 			// Se é folha, vemos se está cheia
 			if (filho->cheia())
@@ -833,18 +888,18 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::removeRecursivo(no_arvore23<Cha
 			// Se não é folha, precisamos procura o próximo e anterior inordem
 			no_arvore23<Chave, Item> *prox, *ant;
 			prox = achaMenor(filho->dir);
-			ant = achaMaior(pai->cheia() ? filho->meio : filho->esq);
+			ant = achaMaior(filho->cheia() ? filho->meio : filho->esq);
 			// E vemos se algum deles é 3-nó
 
 			if (prox->cheia()) {
-				*filho->node1 = *prox->node1;
+				*filho->node2 = *prox->node1;
 				removeRecursivo(filho, filho->dir, prox->node1->chave, achou, diminuiu);
 			} else if (ant->cheia()) {
-				*filho->node1 = *ant->node2;
-				removeRecursivo(filho, pai->cheia() ? filho->meio : filho->esq, ant->node2->chave,
+				*filho->node2 = *ant->node2;
+				removeRecursivo(filho, filho->cheia() ? filho->meio : filho->esq, ant->node2->chave,
 				                achou, diminuiu);
 			} else {
-				*filho->node1 = *prox->node1;
+				*filho->node2 = *prox->node1;
 				removeRecursivo(filho, filho->dir, prox->node1->chave, achou, diminuiu);
 				if (diminuiu) {
 					if (pai == nullptr) { // Se o nó nulo chegou na raiz, nos livramos dele
@@ -956,61 +1011,16 @@ template <typename Chave, typename Item>
 void arvore23<Chave, Item>::imprimeRecursivo(no_arvore23<Chave, Item> *raiz) {
 	if (raiz != nullptr) { // Base da recursão é raiz nula
 		// Imprimimos in-ordem
-		imprimeRecursivo(raiz->esq);
-		std::cout << *raiz->node1 << "\n";
-		imprimeRecursivo(raiz->meio);
-		if (raiz->cheia()) std::cout << *raiz->node2 << "\n";
-		imprimeRecursivo(raiz->dir);
-
-		// std::cout << "[ " << *raiz->node1 << " | ";
-		// if (raiz->cheia())
-		// 	std::cout << *raiz->node2;
-		// else
-		// 	std::cout << " vazio ";
-		// std::cout << " ]\t com filhos:\n";
-
-		// std::cout << "\tEsq:  ";
-		// if (raiz->esq) {
-		// 	std::cout << "[ " << *raiz->esq->node1 << " | ";
-		// 	if (raiz->esq->cheia())
-		// 		std::cout << *raiz->esq->node2;
-		// 	else
-		// 		std::cout << " vazio ";
-		// 	std::cout << " ]\n";
-		// } else {
-		// 	std::cout << "null\n";
-		// }
-
-		// std::cout << "\tMeio: ";
-		// if (raiz->meio) {
-		// 	std::cout << "[ " << *raiz->meio->node1 << " | ";
-		// 	if (raiz->meio->cheia())
-		// 		std::cout << *raiz->meio->node2;
-		// 	else
-		// 		std::cout << " vazio ";
-		// 	std::cout << " ]\n";
-		// } else {
-		// 	std::cout << "null\n";
-		// }
-
-		// std::cout << "\tDir:  ";
-		// if (raiz->dir) {
-		// 	std::cout << "[ " << *raiz->dir->node1 << " | ";
-		// 	if (raiz->dir->cheia())
-		// 		std::cout << *raiz->dir->node2;
-		// 	else
-		// 		std::cout << " vazio ";
-		// 	std::cout << " ]\n";
-		// } else {
-		// 	std::cout << "null\n";
-		// }
-		// std::cout << "\tValores de nós em subárvores: " << raiz->numNosEsq <<
-		// " "
-		//           << raiz->numNosMeio << " " << raiz->numNosDir << "\n";
-
 		// imprimeRecursivo(raiz->esq);
+		// std::cout << *raiz->node1 << "\n";
 		// imprimeRecursivo(raiz->meio);
+		// if (raiz->cheia()) std::cout << *raiz->node2 << "\n";
 		// imprimeRecursivo(raiz->dir);
+
+		raiz->debug();
+		imprimeRecursivo(raiz->esq);
+		imprimeRecursivo(raiz->meio);
+		imprimeRecursivo(raiz->dir);
 	}
 }
 
