@@ -8,8 +8,6 @@
 #include "chaveItem.hpp"
 #include "symbolTable.hpp"
 
-using namespace std;
-
 // DECLARAÇÃO DAS CLASSES
 
 template <typename Chave = MyString, typename Item = int>
@@ -20,10 +18,8 @@ class no_arvore23 {
 	no_arvore23<Chave, Item> *esq;  // Filho esquerdo
 	no_arvore23<Chave, Item> *meio; // Filho do meio
 	no_arvore23<Chave, Item> *dir;  // Filho direito
-	int numNosEsq;                  // Números de nós na subárvore esquerda
-	int numNosMeio;                 // Número de nós na subárvore do meio
-	int numNosDir;                  // Número de nós na subárvore direita
-	bool node2preenchido;           // Indica se o nó 2 está preenchido ou não
+
+	bool node2preenchido; // Indica se o nó 2 está preenchido ou não
 
 	no_arvore23();
 	no_arvore23(Par<Chave, Item>);
@@ -42,7 +38,7 @@ class no_arvore23 {
 
 template <typename Chave = MyString, typename Item = int>
 class arvore23 : public SymbolTable<Chave, Item> {
-  public:
+  private:
 	no_arvore23<Chave, Item> *raiz;
 
 	// Função auxiliar do destrutor
@@ -101,6 +97,10 @@ class arvore23 : public SymbolTable<Chave, Item> {
 	no_arvore23<Chave, Item> *achaMaior(no_arvore23<Chave, Item> *);
 	no_arvore23<Chave, Item> *achaMenor(no_arvore23<Chave, Item> *);
 
+	int numNosEsq(no_arvore23<Chave, Item> *);  // Números de nós na subárvore esquerda
+	int numNosMeio(no_arvore23<Chave, Item> *); // Número de nós na subárvore do meio
+	int numNosDir(no_arvore23<Chave, Item> *);  // Número de nós na subárvore direita
+
   public:
 	arvore23();
 	~arvore23();
@@ -121,9 +121,6 @@ no_arvore23<Chave, Item>::no_arvore23()
       esq(nullptr),
       meio(nullptr),
       dir(nullptr),
-      numNosEsq(0),
-      numNosMeio(0),
-      numNosDir(0),
       node2preenchido(false) {}
 
 template <typename Chave, typename Item>
@@ -132,9 +129,6 @@ no_arvore23<Chave, Item>::no_arvore23(Par<Chave, Item> p)
       esq(nullptr),
       meio(nullptr),
       dir(nullptr),
-      numNosEsq(0),
-      numNosMeio(0),
-      numNosDir(0),
       node2preenchido(false) {
 	node1 = new Par<Chave, Item>;
 	*node1 = p;
@@ -142,13 +136,7 @@ no_arvore23<Chave, Item>::no_arvore23(Par<Chave, Item> p)
 
 template <typename Chave, typename Item>
 no_arvore23<Chave, Item>::no_arvore23(Par<Chave, Item> p1, Par<Chave, Item> p2)
-    : esq(nullptr),
-      meio(nullptr),
-      dir(nullptr),
-      numNosEsq(0),
-      numNosMeio(0),
-      numNosDir(0),
-      node2preenchido(true) {
+    : esq(nullptr), meio(nullptr), dir(nullptr), node2preenchido(true) {
 	node1 = new Par<Chave, Item>;
 	*node1 = p1;
 	node2 = new Par<Chave, Item>;
@@ -160,7 +148,6 @@ no_arvore23<Chave, Item>::~no_arvore23() {
 	delete node1;
 	delete node2;
 	esq = meio = dir = nullptr;
-	numNosEsq = numNosMeio = numNosDir = 0;
 }
 
 template <typename Chave, typename Item>
@@ -190,16 +177,16 @@ void no_arvore23<Chave, Item>::insere(no_arvore23<Chave, Item> *p) {
 	if (this->node1->chave < p->node1->chave) { // filhos da direita
 		*this->node2 = *p->node1;
 		this->meio = p->esq;
-		this->numNosMeio = p->numNosEsq;
+		// this->numNosMeio = p->numNosEsq;
 		this->dir = p->dir;
-		this->numNosDir = p->numNosDir;
+		// this->numNosDir = p->numNosDir;
 	} else { // filhos da esquerda
 		*this->node2 = *this->node1;
 		*this->node1 = *p->node1;
 		this->esq = p->esq;
-		this->numNosEsq = p->numNosEsq;
+		// this->numNosEsq = p->numNosEsq;
 		this->meio = p->dir;
-		this->numNosMeio = p->numNosDir;
+		// this->numNosMeio = p->numNosDir;
 	}
 	this->node2preenchido = true;
 	delete p;
@@ -249,8 +236,6 @@ void no_arvore23<Chave, Item>::debug() {
 	} else {
 		std::cout << "null\n";
 	}
-	std::cout << "\tValores de nós em subárvores: " << this->numNosEsq << " " << this->numNosMeio
-	          << " " << this->numNosDir << "\n";
 }
 
 // IMPLEMENTAÇÃO ARVORE23
@@ -306,7 +291,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::split(no_arvore23<Chave, Item> 
 
 	meio->esq = esq;
 	meio->dir = dir;
-	meio->numNosEsq = meio->numNosDir = 1;
+	// meio->numNosEsq = meio->numNosDir = 1;
 	delete node; // Não usaremos para mais nada aquele nó antigo
 	return meio;
 }
@@ -325,9 +310,9 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::split(no_arvore23<Chave, Item> 
 		maior = new no_arvore23<Chave, Item>(*pai->node2);
 
 		maior->esq = pai->meio;
-		maior->numNosEsq = pai->numNosMeio;
+		// maior->numNosEsq = pai->numNosMeio;
 		maior->dir = pai->dir;
-		maior->numNosDir = pai->numNosDir;
+		// maior->numNosDir = pai->numNosDir;
 		// o menor é o filho, manterá suas subárvores
 	} else if (pai->meio == filho) {
 		// filho é o meio
@@ -337,13 +322,13 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::split(no_arvore23<Chave, Item> 
 		maior = new no_arvore23<Chave, Item>(*pai->node2);
 
 		menor->esq = pai->esq;
-		menor->numNosEsq = pai->numNosEsq;
+		// menor->numNosEsq = pai->numNosEsq;
 		menor->dir = filho->esq;
-		menor->numNosDir = filho->numNosEsq;
+		// menor->numNosDir = filho->numNosEsq;
 		maior->esq = filho->dir;
-		maior->numNosEsq = filho->numNosDir;
+		// maior->numNosEsq = filho->numNosDir;
 		maior->dir = pai->dir;
-		maior->numNosDir = pai->numNosDir;
+		// maior->numNosDir = pai->numNosDir;
 		// o meio é o filho, já salvamos suas subárvores
 	} else {
 		// filho é a direita
@@ -353,17 +338,17 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::split(no_arvore23<Chave, Item> 
 		maior = filho;
 
 		menor->esq = pai->esq;
-		menor->numNosEsq = pai->numNosEsq;
+		// menor->numNosEsq = pai->numNosEsq;
 		menor->dir = pai->meio;
-		menor->numNosDir = pai->numNosMeio;
+		// menor->numNosDir = pai->numNosMeio;
 		// o maior é o filho, materá suas subárvores
 	}
 
 	// o meio é a raiz, a sua esquerda e direita sempre serão menor e maior
 	meior->esq = menor;
-	meior->numNosEsq = menor->numNosEsq + menor->numNosDir + 1;
+	// meior->numNosEsq = menor->numNosEsq + menor->numNosDir + 1;
 	meior->dir = maior;
-	meior->numNosDir = maior->numNosEsq + maior->numNosDir + 1;
+	// meior->numNosDir = maior->numNosEsq + maior->numNosDir + 1;
 
 	pai->esq = pai->meio = pai->dir = nullptr;
 	delete pai;   // O antigo nó do pai (que tinha dois elementos) agora não existe
@@ -459,7 +444,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::insereRecursivo(no_arvore23<Cha
 
 			// 3.1.2.2 Se a chave foi inserida, aumentamos o número de caras na
 			// direita
-			if (!achou) raiz->numNosEsq++;
+			// if (!achou) raiz->numNosEsq++;
 
 			// 3.1.2.3 Precisamos agora verificar se a subárvore esquerda cresceu
 			if (cresceu) raiz->insere(raiz->esq); // Inserimos a subárvore esquerda nesse nó
@@ -469,7 +454,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::insereRecursivo(no_arvore23<Cha
 
 			// 3.1.3.2 Se a chave foi inserida, aumentamos o número de caras na
 			// direita
-			if (!achou) raiz->numNosDir++;
+			// if (!achou) raiz->numNosDir++;
 
 			// 3.1.3.3 Precisamos agora verificar se a subárvore direita cresceu
 			if (cresceu) raiz->insere(raiz->dir); // Inserimos a subárvore direita nesse nó
@@ -485,7 +470,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::insereRecursivo(no_arvore23<Cha
 
 			// 3.2.1.2 Se a chave foi inserida, aumentamos o número de caras na
 			// esquerda
-			if (!achou) raiz->numNosEsq++;
+			// if (!achou) raiz->numNosEsq++;
 
 			// 3.2.1.3 Precisamos agora verificar se a subárvore esquerda cresceu
 			if (cresceu) {
@@ -503,7 +488,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::insereRecursivo(no_arvore23<Cha
 			raiz->meio = insereRecursivo(raiz->meio, chave, valor, achou, cresceu);
 
 			// 3.2.3.2 Se a chave foi inserida, aumentamos o número de caras no meio
-			if (!achou) raiz->numNosMeio++;
+			// if (!achou) raiz->numNosMeio++;
 
 			// 3.2.3.3 Precisamos agora verificar se a subárvore do meio cresceu
 			if (cresceu) {
@@ -522,7 +507,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::insereRecursivo(no_arvore23<Cha
 
 			// 3.2.5.2 Se a chave foi inserida, aumentamos o número de caras na
 			// direita
-			if (!achou) raiz->numNosDir++;
+			// if (!achou) raiz->numNosDir++;
 
 			// 3.2.5.3 Precisamos agora verificar se a subárvore direita cresceu
 			if (cresceu) {
@@ -533,6 +518,30 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::insereRecursivo(no_arvore23<Cha
 		}
 		return raiz;
 	}
+}
+
+template <typename Chave, typename Item>
+int arvore23<Chave, Item>::numNosEsq(no_arvore23<Chave, Item> *no) {
+	if (no == nullptr) return 0;
+	if (no->esq == nullptr) return 0;
+	return (no->esq->cheia() ? 2 : 1) + numNosEsq(no->esq) + numNosMeio(no->esq) +
+	       numNosDir(no->esq);
+}
+
+template <typename Chave, typename Item>
+int arvore23<Chave, Item>::numNosMeio(no_arvore23<Chave, Item> *no) {
+	if (no == nullptr) return 0;
+	if (no->meio == nullptr || !no->cheia()) return 0;
+	return (no->meio->cheia() ? 2 : 1) + numNosEsq(no->meio) + numNosMeio(no->meio) +
+	       numNosDir(no->meio);
+}
+
+template <typename Chave, typename Item>
+int arvore23<Chave, Item>::numNosDir(no_arvore23<Chave, Item> *no) {
+	if (no == nullptr) return 0;
+	if (no->dir == nullptr) return 0;
+	return (no->dir->cheia() ? 2 : 1) + numNosEsq(no->dir) + numNosMeio(no->dir) +
+	       numNosDir(no->dir);
 }
 
 template <typename Chave, typename Item>
@@ -584,6 +593,7 @@ bool arvore23<Chave, Item>::borrow(no_arvore23<Chave, Item> *pai, no_arvore23<Ch
 		irmao->node2preenchido = false;
 		// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
 		if (filho->esq == nullptr) filho->esq = filho->dir;
+
 		filho->dir = irmao->esq;
 		irmao->esq = irmao->meio;
 		irmao->meio = nullptr;
@@ -600,6 +610,7 @@ bool arvore23<Chave, Item>::borrow(no_arvore23<Chave, Item> *pai, no_arvore23<Ch
 			irmao->node2preenchido = false;
 			// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
 			if (filho->dir == nullptr) filho->dir = filho->esq;
+
 			filho->esq = irmao->dir;
 			irmao->dir = irmao->meio;
 			irmao->meio = nullptr;
@@ -612,11 +623,11 @@ bool arvore23<Chave, Item>::borrow(no_arvore23<Chave, Item> *pai, no_arvore23<Ch
 			irmao->node2preenchido = false;
 			// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
 			if (filho->esq == nullptr) filho->esq = filho->dir;
+
 			filho->dir = irmao->esq;
 			irmao->esq = irmao->meio;
 			irmao->meio = nullptr;
 		}
-
 	} else {
 		// 3. O filho é filho direito
 		if (pai->cheia()) {
@@ -640,6 +651,7 @@ bool arvore23<Chave, Item>::borrow(no_arvore23<Chave, Item> *pai, no_arvore23<Ch
 		irmao->node2preenchido = false;
 		// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
 		if (filho->dir == nullptr) filho->dir = filho->esq;
+
 		filho->esq = irmao->dir;
 		irmao->dir = irmao->meio;
 		irmao->meio = nullptr;
@@ -773,7 +785,6 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::removeRecursivo(no_arvore23<Cha
 		// A chave está para a esquerda
 		removeRecursivo(filho, filho->esq, chave, achou, diminuiu);
 		if (achou) {
-			filho->numNosEsq--;
 			if (diminuiu) {
 				if (pai == nullptr) { // Se o nó nulo chegou na raiz, nos livramos dele
 					pai = filho;      // Salvamos o filho, que é o nó nulo
@@ -848,7 +859,6 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::removeRecursivo(no_arvore23<Cha
 		// A chave está para o meio
 		removeRecursivo(filho, filho->meio, chave, achou, diminuiu);
 		if (achou) {
-			filho->numNosMeio--;
 			if (diminuiu) {
 				if (pai == nullptr) { // Se o nó nulo chegou na raiz, nos livramos dele
 					pai = filho;      // Salvamos o filho, que é o nó nulo
@@ -922,7 +932,6 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::removeRecursivo(no_arvore23<Cha
 		// A chave está para a direita
 		removeRecursivo(filho, filho->dir, chave, achou, diminuiu);
 		if (achou) {
-			filho->numNosDir--;
 			if (diminuiu) {
 				if (pai == nullptr) { // Se o nó nulo chegou na raiz, nos livramos dele
 					pai = filho;      // Salvamos o filho, que é o nó nulo
@@ -956,15 +965,15 @@ int arvore23<Chave, Item>::rank(Chave chave) {
 		if (chave < it->node1->chave) {
 			it = it->esq;
 		} else if (chave == it->node1->chave) {
-			return menores + it->numNosEsq;
+			return menores + numNosEsq(it);
 		} else if (it->cheia() && chave < it->node2->chave) {
-			menores += (it->numNosEsq + 1);
+			menores += (numNosEsq(it) + 1);
 			it = it->meio;
 		} else if (it->cheia() && chave == it->node2->chave) {
-			return menores + it->numNosEsq + 1 + it->numNosMeio;
+			return menores + numNosEsq(it) + 1 + numNosMeio(it);
 		} else {
-			menores += (it->numNosEsq + 1);
-			if (it->cheia()) menores += (it->numNosMeio + 1);
+			menores += (numNosEsq(it) + 1);
+			if (it->cheia()) menores += (numNosMeio(it) + 1);
 			it = it->dir;
 		}
 	}
@@ -979,18 +988,18 @@ Chave arvore23<Chave, Item>::seleciona(int k) {
 	it = raiz;                    // o iterador atual
 
 	while (it != nullptr) {
-		if (k < it->numNosEsq) {
+		if (k < numNosEsq(it)) {
 			it = it->esq;
-		} else if (k == it->numNosEsq) {
+		} else if (k == numNosEsq(it)) {
 			return it->node1->chave;
-		} else if (it->cheia() && k < it->numNosEsq + 1 + it->numNosMeio) {
-			k -= (it->numNosEsq + 1);
+		} else if (it->cheia() && k < numNosEsq(it) + 1 + numNosMeio(it)) {
+			k -= (numNosEsq(it) + 1);
 			it = it->meio;
-		} else if (it->cheia() && k == it->numNosEsq + 1 + it->numNosMeio) {
+		} else if (it->cheia() && k == numNosEsq(it) + 1 + numNosMeio(it)) {
 			return it->node2->chave;
 		} else {
-			k -= (it->numNosEsq + 1);
-			if (it->cheia()) k -= (it->numNosMeio + 1);
+			k -= (numNosEsq(it) + 1);
+			if (it->cheia()) k -= (numNosMeio(it) + 1);
 			it = it->dir;
 		}
 	}
@@ -1011,16 +1020,16 @@ template <typename Chave, typename Item>
 void arvore23<Chave, Item>::imprimeRecursivo(no_arvore23<Chave, Item> *raiz) {
 	if (raiz != nullptr) { // Base da recursão é raiz nula
 		// Imprimimos in-ordem
-		// imprimeRecursivo(raiz->esq);
-		// std::cout << *raiz->node1 << "\n";
-		// imprimeRecursivo(raiz->meio);
-		// if (raiz->cheia()) std::cout << *raiz->node2 << "\n";
-		// imprimeRecursivo(raiz->dir);
-
-		raiz->debug();
 		imprimeRecursivo(raiz->esq);
+		std::cout << *raiz->node1 << "\n";
 		imprimeRecursivo(raiz->meio);
+		if (raiz->cheia()) std::cout << *raiz->node2 << "\n";
 		imprimeRecursivo(raiz->dir);
+
+		// raiz->debug();
+		// imprimeRecursivo(raiz->esq);
+		// imprimeRecursivo(raiz->meio);
+		// imprimeRecursivo(raiz->dir);
 	}
 }
 

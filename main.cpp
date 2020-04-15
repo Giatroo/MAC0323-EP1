@@ -28,91 +28,6 @@ void testeAleatorizado(int num_op);
 
 // ******** MAIN ********
 
-void testeSplit() {
-	arvore23<> a;
-	no_arvore23<> *n =
-	    new no_arvore23<>((Par<>){ (MyString) "Hello", 3 }, (Par<>){ (MyString) "Mundo", 1 });
-	a.raiz = n;
-
-	a.imprime();
-
-	cout << endl;
-
-	cout << *a.raiz->node1 << endl;
-	cout << *a.raiz->node2 << endl;
-	cout << a.raiz->esq << endl;
-	cout << a.raiz->meio << endl;
-	cout << a.raiz->dir << endl;
-
-	cout << endl;
-
-	a.raiz = a.split(a.raiz, ((Par<>){ (MyString) "Ola", 1 }));
-
-	a.imprime();
-
-	cout << endl;
-
-	cout << *a.raiz->node1 << endl;
-	// cout << *a.raiz->node2 << endl;
-	cout << a.raiz->esq << endl;
-	cout << a.raiz->meio << endl;
-	cout << a.raiz->dir << endl;
-}
-
-void testeInsere() {
-	arvore23<> a;
-	no_arvore23<> *n = new no_arvore23<>((Par<>){ (MyString) "hello", 3 });
-
-	a.raiz = n;
-	a.raiz->insere((Par<>){ (MyString) "ola", 2 });
-	a.imprime();
-
-	a.raiz = a.split(a.raiz, (Par<>){ (MyString) "aac", 2 });
-	a.imprime();
-
-	a.raiz->esq->insere((Par<>){ (MyString) "aaa", 3 });
-	a.imprime();
-
-	a.raiz->esq = a.split(a.raiz->esq, (Par<>){ (MyString) "aab", 1 });
-	a.imprime();
-
-	cout << *a.raiz->esq->node1 << endl;
-
-	a.raiz->insere(a.raiz->esq);
-	a.imprime();
-
-	// cout << endl;
-	// cout << "[ " << *a.raiz->node1 << " | " << *a.raiz->node2 << " ]" << endl;
-	// cout << "[ " << *a.raiz->esq->node1 << " | " << *a.raiz->esq->node2 << " ]"
-	//      << endl;
-	// cout << "[ " << *a.raiz->meio->node1 << " | " << *a.raiz->meio->node2 << " ]"
-	//      << endl;
-	// cout << "[ " << *a.raiz->dir->node1 << " | " << *a.raiz->dir->node2 << " ]"
-	//      << endl;
-
-	arvore23<> b;
-	n = new no_arvore23<>((Par<>){ (MyString) "world", 3 });
-	b.raiz = n;
-	b.raiz->insere((Par<>){ (MyString) "hi", 1 });
-
-	b.raiz = b.split(b.raiz, (Par<>){ (MyString) "zzz", 1 });
-	b.imprime();
-
-	b.raiz->dir->insere((Par<>){ (MyString) "zzc", 4 });
-	b.raiz->dir = b.split(b.raiz->dir, (Par<>){ (MyString) "zza", -5 });
-	b.raiz->insere(b.raiz->dir);
-	b.imprime();
-
-	// cout << endl;
-	// cout << "[ " << *b.raiz->node1 << " | " << *b.raiz->node2 << " ]" << endl;
-	// cout << "[ " << *b.raiz->esq->node1 << " | " << *b.raiz->esq->node2 << " ]"
-	//      << endl;
-	// cout << "[ " << *b.raiz->meio->node1 << " | " << *b.raiz->meio->node2 << " ]"
-	//      << endl;
-	// cout << "[ " << *b.raiz->dir->node1 << " | " << *b.raiz->dir->node2 << " ]"
-	//      << endl;
-}
-
 int main(int argc, const char **argv) {
 	teste();
 	// testeSplit();
@@ -125,12 +40,12 @@ void teste() {
 	srand(time(NULL));
 
 	testeInicial();
-	testeInsere(100000);
-	testeRank(100000);
-	testeSeleciona(100000);
-	testeDevolve(100000);
-	testeRemove(100000);
-	testeAleatorizado(500000);
+	testeInsere(10000);
+	testeRank(10000);
+	testeSeleciona(10000);
+	testeDevolve(10000);
+	testeRemove(10000);
+	testeAleatorizado(5000);
 	// st.imprime();
 }
 void testeInicial() {
@@ -154,58 +69,58 @@ void testeInicial() {
 	// cout << endl;
 
 	st.insere((MyString) "outra palavra", -23);
+	st.imprime();
+	cout << endl;
+
+	cout << "devolve(ola) = " << st.devolve((MyString) "ola") << endl;
+	cout << "devolve(mundo) = " << st.devolve((MyString) "mundo") << endl;
+	cout << endl;
+
+	cout << "devolve(a) = " << st.devolve((MyString) "a") << endl;
+	cout << "devolve(b) = " << st.devolve((MyString) "b") << endl;
+	cout << endl;
+
+	st.imprime();
+	cout << endl;
+
+	cout << "rank(ola) = " << st.rank((MyString) "ola") << endl;
+	cout << "rank(sei lá) = " << st.rank((MyString) "sei lá") << endl;
+	cout << "rank(outra palavra) = " << st.rank((MyString) "outra palavra") << endl;
+	cout << "rank(mundo) = " << st.rank((MyString) "mundo") << endl;
+	cout << endl;
+	cout << "rank(a) = " << st.rank((MyString) "a") << endl;
+	cout << "rank(n) = " << st.rank((MyString) "n") << endl;
+	cout << "rank(zzzz) = " << st.rank((MyString) "zzzz") << endl;
+	cout << endl;
+
+	st.imprime();
+	cout << endl;
+
+	cout << "seleciona(4) = " << st.seleciona(4) << endl;
+	cout << "seleciona(3) = " << st.seleciona(3) << endl;
+	cout << "seleciona(2) = " << st.seleciona(2) << endl;
+	cout << "seleciona(1) = " << st.seleciona(1) << endl;
+	cout << "seleciona(0) = " << st.seleciona(0) << endl;
+
+	// st.remove((MyString) "outra palavra");
+	// cout << endl;
+
 	// st.imprime();
-	// cout << endl;
+	cout << endl;
 
-	// cout << "devolve(ola) = " << st.devolve((MyString) "ola") << endl;
-	// cout << "devolve(mundo) = " << st.devolve((MyString) "mundo") << endl;
-	// cout << endl;
-
-	// cout << "devolve(a) = " << st.devolve((MyString) "a") << endl;
-	// cout << "devolve(b) = " << st.devolve((MyString) "b") << endl;
-	// cout << endl;
-
-	// st.imprime();
-	// cout << endl;
-
-	// cout << "rank(ola) = " << st.rank((MyString) "ola") << endl;
-	// cout << "rank(sei lá) = " << st.rank((MyString) "sei lá") << endl;
-	// cout << "rank(outra palavra) = " << st.rank((MyString) "outra palavra") << endl;
-	// cout << "rank(mundo) = " << st.rank((MyString) "mundo") << endl;
-	// cout << endl;
-	// cout << "rank(a) = " << st.rank((MyString) "a") << endl;
-	// cout << "rank(n) = " << st.rank((MyString) "n") << endl;
-	// cout << "rank(zzzz) = " << st.rank((MyString) "zzzz") << endl;
-	// cout << endl;
-
-	// st.imprime();
-	// cout << endl;
-
-	// cout << "seleciona(4) = " << st.seleciona(4) << endl;
-	// cout << "seleciona(3) = " << st.seleciona(3) << endl;
-	// cout << "seleciona(2) = " << st.seleciona(2) << endl;
-	// cout << "seleciona(1) = " << st.seleciona(1) << endl;
-	// cout << "seleciona(0) = " << st.seleciona(0) << endl;
-
-	// // st.remove((MyString) "outra palavra");
-	// // cout << endl;
-
-	// // st.imprime();
-	// cout << endl;
-
-	// cout << "seleciona(7) = " << st.seleciona(7) << endl;
-	// cout << "seleciona(3) = " << st.seleciona(3) << endl;
-	// cout << "seleciona(2) = " << st.seleciona(2) << endl;
-	// cout << "seleciona(1) = " << st.seleciona(1) << endl;
-	// cout << "seleciona(0) = " << st.seleciona(0) << endl;
-	// cout << "seleciona(-3) = " << st.seleciona(-3) << endl;
-	// cout << endl;
+	cout << "seleciona(7) = " << st.seleciona(7) << endl;
+	cout << "seleciona(3) = " << st.seleciona(3) << endl;
+	cout << "seleciona(2) = " << st.seleciona(2) << endl;
+	cout << "seleciona(1) = " << st.seleciona(1) << endl;
+	cout << "seleciona(0) = " << st.seleciona(0) << endl;
+	cout << "seleciona(-3) = " << st.seleciona(-3) << endl;
+	cout << endl;
 
 	st.insere((MyString) "mundo", 1);
-	// cout << st.devolve((MyString) "mundo") << endl;
+	cout << st.devolve((MyString) "mundo") << endl;
 
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
 	st.insere((MyString) "aaa", 2);
 	// st.imprime();
@@ -223,9 +138,9 @@ void testeInicial() {
 	st.imprime();
 	cout << endl;
 
-	// st.remove((MyString) "a");
-	// st.imprime();
-	// cout << endl;
+	st.remove((MyString) "a");
+	st.imprime();
+	cout << endl;
 
 	// st.remove((MyString) "aaa");
 	// st.imprime();
