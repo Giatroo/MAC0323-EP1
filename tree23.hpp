@@ -29,9 +29,9 @@ class no_arvore23 {
 	~no_arvore23();
 
 	// Funções auxiliares
-	bool ehFolha();                // Retorna se todos os ponteiros são nulos
-	bool cheia();                  // Retorna se node1 e node2 estão preenchidos
-	void insere(Par<Chave, Item>); // Insere um novo par no nó
+	bool ehFolha();                          // Retorna se todos os ponteiros são nulos
+	bool cheia();                            // Retorna se node1 e node2 estão preenchidos
+	void insere(Par<Chave, Item>);           // Insere um novo par no nó
 	void insere(no_arvore23<Chave, Item> *); // Insere uma árvore nesse nó
 	                                         // essa árvore deve ser filha
 	                                         // do nó e ele deve ter apenas um par
@@ -49,8 +49,20 @@ class arvore23 : public SymbolTable<Chave, Item> {
 	void imprimeRecursivo(no_arvore23<Chave, Item> *);
 
 	// Função auxiliar do insere
-	no_arvore23<Chave, Item> *insereRecursivo(no_arvore23<Chave, Item> *, Chave,
-	                                          Item, bool &, bool &);
+	no_arvore23<Chave, Item> *insereRecursivo(no_arvore23<Chave, Item> *, Chave, Item, bool &,
+	                                          bool &);
+
+	// Função auxiliar do remove
+	// Temos dois nós, pai e filho, e estaremos removendo uma chave do filho. O pai serve apenas
+	// como nó auxiliar. Além disso, usamos dois booleanos achou e diminuiu
+	// O primeiro indica se achamos a chave que estávamos tentando remover em alguma subárvore do
+	// filho
+	// O segundo indica se uma subárvore diminuiu de tamanho
+	no_arvore23<Chave, Item> *removeRecursivo(no_arvore23<Chave, Item> *pai,
+	                                          no_arvore23<Chave, Item> *filho, Chave, bool &achou,
+	                                          bool &diminuiu);
+
+	no_arvore23<Chave, Item> *removeFolha(no_arvore23<Chave, Item> *folha, Chave ch);
 
 	// Insere um novo par em um nó que já tinha dois pares.
 	// Cria três nós cada um com um par cada onde o nó de chave intermediária
@@ -60,15 +72,13 @@ class arvore23 : public SymbolTable<Chave, Item> {
 
 	// Insere uma nova subárvore em um nó que já tinha dois pares
 	// Cria três nós de forma que o de chave intermediária é retornada
-	no_arvore23<Chave, Item> *split(no_arvore23<Chave, Item> *,
-	                                no_arvore23<Chave, Item> *);
+	no_arvore23<Chave, Item> *split(no_arvore23<Chave, Item> *, no_arvore23<Chave, Item> *);
 
 	// Dados dois nós a e b, onde b é filho de a e b foi splitado, queremos inserir
 	// a raiz de b após o split em a. Caso a não precise ser splitado, o retorno
 	// será um ponteiro para a, caso contrário, o retorno era um ponteiro para a raiz
 	// da nova subárvore (após o split de a)
-	no_arvore23<Chave, Item> *join(no_arvore23<Chave, Item> *a,
-	                               no_arvore23<Chave, Item> *b);
+	no_arvore23<Chave, Item> *join(no_arvore23<Chave, Item> *a, no_arvore23<Chave, Item> *b);
 
 	// Dados dois nós, a e b, onde b é filho de a e b teve um elemento removido,
 	// a função vê se algum dos irmãos adjacentes de b podem lhe emprestar um par
@@ -81,8 +91,12 @@ class arvore23 : public SymbolTable<Chave, Item> {
 	// irmão do filho removido. Se o pai era um 3-nó, então tudo certo, mas caso
 	// contrário, temos que avisar que o pai ficou vazio e precisamos seguir
 	// arrumando a árvore
-	no_arvore23<Chave, Item> *merge(no_arvore23<Chave, Item> *,
-	                                no_arvore23<Chave, Item> *);
+	void merge(no_arvore23<Chave, Item> *, no_arvore23<Chave, Item> *);
+
+	// Funções para achar o maior e menor elementos de uma árvore 2-3
+	// Vale a pena perceber que este elemento sempre está numa folha
+	no_arvore23<Chave, Item> *achaMaior(no_arvore23<Chave, Item> *);
+	no_arvore23<Chave, Item> *achaMenor(no_arvore23<Chave, Item> *);
 
   public:
 	arvore23();
@@ -211,8 +225,8 @@ void arvore23<Chave, Item>::deleteArvore(no_arvore23<Chave, Item> *raiz) {
 }
 
 template <typename Chave, typename Item>
-no_arvore23<Chave, Item> *arvore23<Chave, Item>::split(
-    no_arvore23<Chave, Item> *node, Par<Chave, Item> p) {
+no_arvore23<Chave, Item> *arvore23<Chave, Item>::split(no_arvore23<Chave, Item> *node,
+                                                       Par<Chave, Item> p) {
 	// Split é uma operação feita em folhas apenas
 	// A folha node está cheia e queremos inserir p
 
@@ -247,8 +261,8 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::split(
 }
 
 template <typename Chave, typename Item>
-no_arvore23<Chave, Item> *arvore23<Chave, Item>::split(
-    no_arvore23<Chave, Item> *pai, no_arvore23<Chave, Item> *filho) {
+no_arvore23<Chave, Item> *arvore23<Chave, Item>::split(no_arvore23<Chave, Item> *pai,
+                                                       no_arvore23<Chave, Item> *filho) {
 	no_arvore23<Chave, Item> *menor, *meior, *maior; // meior pq sim
 	// Precisamos descobrir se o filho é da esquerda, meio ou direita
 
@@ -309,8 +323,8 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::split(
 }
 
 template <typename Chave, typename Item>
-no_arvore23<Chave, Item> *arvore23<Chave, Item>::join(
-    no_arvore23<Chave, Item> *pai, no_arvore23<Chave, Item> *filho) {
+no_arvore23<Chave, Item> *arvore23<Chave, Item>::join(no_arvore23<Chave, Item> *pai,
+                                                      no_arvore23<Chave, Item> *filho) {
 	// Temos dois tipos de join, quando pai está cheio ou quando há lugar
 	// para inserirmos
 
@@ -333,9 +347,9 @@ void arvore23<Chave, Item>::insere(Chave chave, Item valor) {
 }
 
 template <typename Chave, typename Item>
-no_arvore23<Chave, Item> *arvore23<Chave, Item>::insereRecursivo(
-    no_arvore23<Chave, Item> *raiz, Chave chave, Item valor, bool &achou,
-    bool &cresceu) {
+no_arvore23<Chave, Item> *arvore23<Chave, Item>::insereRecursivo(no_arvore23<Chave, Item> *raiz,
+                                                                 Chave chave, Item valor,
+                                                                 bool &achou, bool &cresceu) {
 	// 1. Raiz nula
 	if (raiz == nullptr) {
 		raiz = new no_arvore23<Chave, Item>((Par<Chave, Item>){ chave, valor });
@@ -397,8 +411,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::insereRecursivo(
 			if (!achou) raiz->numNosEsq++;
 
 			// 3.1.2.3 Precisamos agora verificar se a subárvore esquerda cresceu
-			if (cresceu)
-				raiz->insere(raiz->esq); // Inserimos a subárvore esquerda nesse nó
+			if (cresceu) raiz->insere(raiz->esq); // Inserimos a subárvore esquerda nesse nó
 		} else {
 			// 3.1.3.1 Precisamos inserir na subárvore direita
 			raiz->dir = insereRecursivo(raiz->dir, chave, valor, achou, cresceu);
@@ -408,8 +421,7 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::insereRecursivo(
 			if (!achou) raiz->numNosDir++;
 
 			// 3.1.3.3 Precisamos agora verificar se a subárvore direita cresceu
-			if (cresceu)
-				raiz->insere(raiz->dir); // Inserimos a subárvore direita nesse nó
+			if (cresceu) raiz->insere(raiz->dir); // Inserimos a subárvore direita nesse nó
 		}
 
 		cresceu = false; // Não vai crescer, pois só tinha inicialmente um par
@@ -497,8 +509,7 @@ Item arvore23<Chave, Item>::devolve(Chave chave) {
 }
 
 template <typename Chave, typename Item>
-bool arvore23<Chave, Item>::borrow(no_arvore23<Chave, Item> *pai,
-                                   no_arvore23<Chave, Item> *filho) {
+bool arvore23<Chave, Item>::borrow(no_arvore23<Chave, Item> *pai, no_arvore23<Chave, Item> *filho) {
 	// primeiro, precisamos descobrir se o filho é da esquerda, meio ou direita
 	no_arvore23<Chave, Item> *irmao;
 
@@ -516,15 +527,15 @@ bool arvore23<Chave, Item>::borrow(no_arvore23<Chave, Item> *pai,
 			return false;    // Então não conseguimos emprestar e retornamos false
 
 		// Caso contrário, fazemos o empréstimo
-		filho->node1 = pai->node1;
-		pai->node1 = irmao->node1;
-		irmao->node1 = irmao->node2;
+		*filho->node1 = *pai->node1;
+		*pai->node1 = *irmao->node1;
+		*irmao->node1 = *irmao->node2;
 		irmao->node2preenchido = false;
 		// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
 		if (filho->esq == nullptr) filho->esq = filho->dir;
 		filho->dir = irmao->esq;
 		irmao->esq = irmao->meio;
-
+		irmao->meio = nullptr;
 	} else if (pai->cheia() && filho == pai->meio) {
 		// 2. O filho é filho do meio
 		if (!pai->esq->cheia() && !pai->dir->cheia())
@@ -533,23 +544,26 @@ bool arvore23<Chave, Item>::borrow(no_arvore23<Chave, Item> *pai,
 		if (pai->esq->cheia()) {
 			// 2.1 Se o irmão esquerdo está cheio
 			irmao = pai->esq;
-			filho->node1 = pai->node1;
-			pai->node1 = irmao->node2;
+			*filho->node1 = *pai->node1;
+			*pai->node1 = *irmao->node2;
 			irmao->node2preenchido = false;
 			// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
 			if (filho->dir == nullptr) filho->dir = filho->esq;
 			filho->esq = irmao->dir;
+			irmao->dir = irmao->meio;
+			irmao->meio = nullptr;
 		} else {
 			// 2.2 Se o irmão direito está cheio
 			irmao = pai->dir;
-			filho->node1 = pai->node2;
-			pai->node2 = irmao->node1;
-			irmao->node1 = irmao->node2;
+			*filho->node1 = *pai->node2;
+			*pai->node2 = *irmao->node1;
+			*irmao->node1 = *irmao->node2;
 			irmao->node2preenchido = false;
 			// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
 			if (filho->esq == nullptr) filho->esq = filho->dir;
 			filho->dir = irmao->esq;
 			irmao->esq = irmao->meio;
+			irmao->meio = nullptr;
 		}
 
 	} else {
@@ -566,23 +580,25 @@ bool arvore23<Chave, Item>::borrow(no_arvore23<Chave, Item> *pai,
 			return false;    // Então não conseguimos emprestar e retornamos false
 
 		if (pai->cheia()) {
-			filho->node1 = pai->node2;
-			pai->node2 = irmao->node2;
+			*filho->node1 = *pai->node2;
+			*pai->node2 = *irmao->node2;
 		} else {
-			filho->node1 = pai->node1;
-			pai->node1 = irmao->node2;
+			*filho->node1 = *pai->node1;
+			*pai->node1 = *irmao->node2;
 		}
 		irmao->node2preenchido = false;
 		// Se o irmao é uma folha, tudo ok, precisamos ver o caso em que não é
 		if (filho->dir == nullptr) filho->dir = filho->esq;
 		filho->esq = irmao->dir;
 		irmao->dir = irmao->meio;
+		irmao->meio = nullptr;
 	}
+
+	return true;
 }
 
 template <typename Chave, typename Item>
-no_arvore23<Chave, Item> *arvore23<Chave, Item>::merge(
-    no_arvore23<Chave, Item> *pai, no_arvore23<Chave, Item> *filho) {
+void arvore23<Chave, Item>::merge(no_arvore23<Chave, Item> *pai, no_arvore23<Chave, Item> *filho) {
 	no_arvore23<Chave, Item> *irmao;
 
 	if (filho == pai->esq) {
@@ -595,9 +611,9 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::merge(
 			irmao = pai->dir;
 		}
 
-		irmao->node2 = irmao->node1;
+		*irmao->node2 = *irmao->node1;
 		irmao->node2preenchido = true;
-		irmao->node1 = pai->node1;
+		*irmao->node1 = *pai->node1;
 		// Se estamos em folha, terminado, se não, precisamos ajustar ponteiros
 		irmao->meio = irmao->esq;
 		irmao->esq = (filho->esq == nullptr) ? filho->dir : filho->esq;
@@ -605,12 +621,273 @@ no_arvore23<Chave, Item> *arvore23<Chave, Item>::merge(
 		// E finalmente deletamos o filho
 		delete filho;
 		pai->esq = nullptr;
+
+		// No caso em que o pai é 2-nó, ficamos com a esquerda nula, mas no caso dele
+		// ser um 3-nó, precisamos transformá-lo agora em um 2-nó, que é o que ele se
+		// tornou
+		if (pai->cheia()) {
+			pai->node2preenchido = false; // Deixou de ser 3-nó
+			// Trazemos o par2 para a primeira posição (pois o par1 desceu)
+			*pai->node1 = *pai->node2;
+			pai->esq = pai->meio; // esq estava nula, precisamos puxar o meio
+			pai->meio = nullptr;  // tornamos o meio nulo
+		}
 	} else if (pai->cheia() && filho == pai->meio) {
+		// 2. Se o filho é do meio
+		// Então já sabemos que os dois irmãos são 2-nó, então escolhemos qualquer um e juntamos
+		// Escolherei junta com a esquerda
+		irmao = pai->esq;
+		*irmao->node2 = *pai->node1;
+		irmao->node2preenchido = true;
+		*pai->node1 = *pai->node2;
+		pai->node2preenchido = false;
+		// Agora acertamos os pointeiros, para caso não estejamos em uma folha
+		irmao->meio = irmao->dir;
+		irmao->dir = filho->esq == nullptr ? filho->dir : filho->esq;
+
+		// Finalmente deletamos o filho
+		delete filho;
+		pai->meio = nullptr;
+	} else {
+		// 3. Se o filho é da direita
+		if (pai->cheia())
+			irmao = pai->meio;
+		else
+			irmao = pai->esq;
+
+		*irmao->node2 = pai->cheia() ? *pai->node2 : *pai->node1;
+		irmao->node2preenchido = true;
+		// Agora acertamos os ponteiros, para caso não estejamos em uma folha
+		irmao->meio = irmao->dir;
+		irmao->dir = filho->esq == nullptr ? filho->dir : filho->esq;
+
+		// Finalmente deletamos o filho
+		delete filho;
+		pai->dir = nullptr;
+
+		// No caso em que o pai é 2-nó, ficamos com a direita nula e esquerda com dois pares, mas no
+		// caso dele ser um 3-nó, precisamos transformá-lo agora em um 2-nó, que é o que ele se
+		// tornou
+		if (pai->cheia()) {
+			pai->node2preenchido = false; // não é mais node2
+			// Fizemos o merge com o irmão do meio, então colocamos ele na direita
+			pai->dir = pai->meio;
+			pai->meio = nullptr; // Limpamos o meio
+		}
 	}
 }
 
 template <typename Chave, typename Item>
-void arvore23<Chave, Item>::remove(Chave chave) {}
+no_arvore23<Chave, Item> *arvore23<Chave, Item>::achaMaior(no_arvore23<Chave, Item> *raiz) {
+	no_arvore23<Chave, Item> *it;
+	while (it->dir != nullptr) it = it->dir;
+	return it;
+}
+
+template <typename Chave, typename Item>
+no_arvore23<Chave, Item> *arvore23<Chave, Item>::achaMenor(no_arvore23<Chave, Item> *raiz) {
+	no_arvore23<Chave, Item> *it;
+	while (it->esq != nullptr) it = it->esq;
+	return it;
+}
+
+template <typename Chave, typename Item>
+no_arvore23<Chave, Item> *arvore23<Chave, Item>::removeFolha(no_arvore23<Chave, Item> *folha,
+                                                             Chave chave) {
+	if (folha->node1->chave == chave) *folha->node1 = *folha->node2;
+	folha->node2preenchido = false;
+	return folha;
+}
+
+template <typename Chave, typename Item>
+void arvore23<Chave, Item>::remove(Chave chave) {
+	bool achou, diminuiu;
+	achou = diminuiu = false;
+	raiz = removeRecursivo(nullptr, raiz, chave, achou, diminuiu);
+}
+
+template <typename Chave, typename Item>
+no_arvore23<Chave, Item> *arvore23<Chave, Item>::removeRecursivo(no_arvore23<Chave, Item> *pai,
+                                                                 no_arvore23<Chave, Item> *filho,
+                                                                 Chave chave, bool &achou,
+                                                                 bool &diminuiu) {
+	if (filho == nullptr) {
+		achou = diminuiu = false;
+		return nullptr;
+	}
+
+	if (chave < filho->node1->chave) {
+		// A chave está para a esquerda
+		removeRecursivo(filho, filho->esq, chave, achou, diminuiu);
+		if (achou) {
+			filho->numNosEsq--;
+			if (diminuiu) {
+				if (pai == nullptr) { // Se o nó nulo chegou na raiz, nos livramos dele
+					pai = filho;      // Salvamos o filho, que é o nó nulo
+					// Fazemos o filho se tornar o nó não nulo
+					filho = filho->esq == nullptr ? filho->dir : filho->esq;
+					delete pai;   // Deletamos o nó vazio
+					return filho; // Retornamos o filho, que é a nova raiz
+				}
+
+				if (!borrow(pai, filho)) {
+					diminuiu = !pai->cheia();
+					merge(pai, filho);
+				} else
+					diminuiu = false;
+			}
+		}
+	} else if (chave == filho->node1->chave) {
+		if (filho->ehFolha()) {
+			// Se é folha, vemos se está cheia
+			if (filho->cheia())
+				removeFolha(filho, chave); // Se sim, remover é fácil
+			else {
+				if (pai == nullptr) {
+					// Se é uma folha, mas não possui pais (ou seja, só existe esse par na árvore)
+					delete filho; // Só deletamos e retornamos que a árvore ficou vazia
+					return nullptr;
+				}
+				// Se não, precisamos ver se dá para o irmão emprestar
+				if (!borrow(pai, filho)) {
+					diminuiu = !pai->cheia();
+					merge(pai, filho); // Se não, precisamos fazer o merge
+				} else
+					diminuiu = false;
+			}
+		} else {
+			// Se não é folha, precisamos procura o próximo e anterior inordem
+			no_arvore23<Chave, Item> *prox, *ant;
+			prox = achaMenor(pai->cheia() ? filho->meio : filho->dir);
+			ant = achaMaior(filho->esq);
+			// E vemos se algum deles é 3-nó
+
+			if (prox->cheia()) {
+				*filho->node1 = *prox->node1;
+				removeRecursivo(filho, pai->cheia() ? filho->meio : filho->dir, prox->node1->chave,
+				                achou, diminuiu);
+			} else if (ant->cheia()) {
+				*filho->node1 = *ant->node2;
+				removeRecursivo(filho, filho->esq, ant->node2->chave, achou, diminuiu);
+			} else {
+				*filho->node1 = *ant->node1;
+				removeRecursivo(filho, filho->esq, ant->node1->chave, achou, diminuiu);
+				if (diminuiu) {
+					if (pai == nullptr) { // Se o nó nulo chegou na raiz, nos livramos dele
+						pai = filho;      // Salvamos o filho, que é o nó nulo
+						// Fazemos o filho se tornar o nó não nulo
+						filho = filho->esq == nullptr ? filho->dir : filho->esq;
+						delete pai;   // Deletamos o nó vazio
+						return filho; // Retornamos o filho, que é a nova raiz
+					}
+
+					if (!borrow(pai, filho)) {
+						diminuiu = !pai->cheia();
+						merge(pai, filho);
+					} else
+						diminuiu = false;
+				}
+			}
+		}
+
+	} else if (filho->cheia() && chave < filho->node2->chave) {
+		// A chave está para o meio
+		removeRecursivo(filho, filho->meio, chave, achou, diminuiu);
+		if (achou) {
+			filho->numNosMeio--;
+			if (diminuiu) {
+				if (pai == nullptr) { // Se o nó nulo chegou na raiz, nos livramos dele
+					pai = filho;      // Salvamos o filho, que é o nó nulo
+					// Fazemos o filho se tornar o nó não nulo
+					filho = filho->esq == nullptr ? filho->dir : filho->esq;
+					delete pai;   // Deletamos o nó vazio
+					return filho; // Retornamos o filho, que é a nova raiz
+				}
+
+				if (!borrow(pai, filho)) {
+					diminuiu = !pai->cheia();
+					merge(pai, filho);
+				} else
+					diminuiu = false;
+			}
+		}
+	} else if (filho->cheia() && chave == filho->node2->chave) {
+		if (filho->ehFolha()) {
+			// Se é folha, vemos se está cheia
+			if (filho->cheia())
+				removeFolha(filho, chave); // Se sim, remover é fácil
+			else {
+				if (pai == nullptr) {
+					// Se é uma folha, mas não possui pais (ou seja, só existe esse par na árvore)
+					delete filho; // Só deletamos e retornamos que a árvore ficou vazia
+					return nullptr;
+				}
+				// Se não, precisamos ver se dá para o irmão emprestar
+				if (!borrow(pai, filho)) {
+					diminuiu = !pai->cheia();
+					merge(pai, filho); // Se não, precisamos fazer o merge
+				} else
+					diminuiu = false;
+			}
+		} else {
+			// Se não é folha, precisamos procura o próximo e anterior inordem
+			no_arvore23<Chave, Item> *prox, *ant;
+			prox = achaMenor(filho->dir);
+			ant = achaMaior(pai->cheia() ? filho->meio : filho->esq);
+			// E vemos se algum deles é 3-nó
+
+			if (prox->cheia()) {
+				*filho->node1 = *prox->node1;
+				removeRecursivo(filho, filho->dir, prox->node1->chave, achou, diminuiu);
+			} else if (ant->cheia()) {
+				*filho->node1 = *ant->node2;
+				removeRecursivo(filho, pai->cheia() ? filho->meio : filho->esq, ant->node2->chave,
+				                achou, diminuiu);
+			} else {
+				*filho->node1 = *prox->node1;
+				removeRecursivo(filho, filho->dir, prox->node1->chave, achou, diminuiu);
+				if (diminuiu) {
+					if (pai == nullptr) { // Se o nó nulo chegou na raiz, nos livramos dele
+						pai = filho;      // Salvamos o filho, que é o nó nulo
+						// Fazemos o filho se tornar o nó não nulo
+						filho = filho->esq == nullptr ? filho->dir : filho->esq;
+						delete pai;   // Deletamos o nó vazio
+						return filho; // Retornamos o filho, que é a nova raiz
+					}
+
+					if (!borrow(pai, filho)) {
+						diminuiu = !pai->cheia();
+						merge(pai, filho);
+					} else
+						diminuiu = false;
+				}
+			}
+		}
+	} else {
+		// A chave está para a direita
+		removeRecursivo(filho, filho->dir, chave, achou, diminuiu);
+		if (achou) {
+			filho->numNosDir--;
+			if (diminuiu) {
+				if (pai == nullptr) { // Se o nó nulo chegou na raiz, nos livramos dele
+					pai = filho;      // Salvamos o filho, que é o nó nulo
+					// Fazemos o filho se tornar o nó não nulo
+					filho = filho->esq == nullptr ? filho->dir : filho->esq;
+					delete pai;   // Deletamos o nó vazio
+					return filho; // Retornamos o filho, que é a nova raiz
+				}
+
+				if (!borrow(pai, filho)) {
+					diminuiu = !pai->cheia();
+					merge(pai, filho);
+				} else
+					diminuiu = false;
+			}
+		}
+	}
+
+	return filho;
+}
 
 template <typename Chave, typename Item>
 int arvore23<Chave, Item>::rank(Chave chave) {
