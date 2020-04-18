@@ -1,13 +1,14 @@
 #include <iostream>
 #include "arvoreBinaria.hpp"
 #include "list.hpp"
+#include "redblack.hpp"
 #include "treap.hpp"
 #include "tree23.hpp"
 #include "vector.hpp"
 
 using namespace std;
 
-arvore23<> st;
+rb_tree<> st;
 
 MyString randomWord() {
 	string a = "";
@@ -40,33 +41,34 @@ void teste() {
 	srand(time(NULL));
 
 	testeInicial();
-	testeInsere(10000);
-	testeRank(10000);
-	testeSeleciona(10000);
-	testeDevolve(10000);
-	testeRemove(10000);
-	testeAleatorizado(5000);
+	testeInsere(1000000);
+	testeRank(1000000);
+	testeSeleciona(1000000);
+	testeDevolve(1000000);
+	testeRemove(1000000);
+	testeAleatorizado(5000000);
 	// st.imprime();
 }
 void testeInicial() {
 	st.imprime();
 	cout << endl;
-	st.remove((MyString) "a");
-	st.remove((MyString) "b");
+	// st.remove((MyString) "a");
+	// st.remove((MyString) "b");
 	st.insere((MyString) "a", 1);
-	st.remove((MyString) "a");
+	// st.remove((MyString) "a");
 
 	st.insere((MyString) "ola", 1);
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
+	cout << "Inserindo mundo" << endl;
 	st.insere((MyString) "mundo", 2);
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
 	st.insere((MyString) "sei lá", 10);
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
 	st.insere((MyString) "outra palavra", -23);
 	st.imprime();
@@ -117,30 +119,38 @@ void testeInicial() {
 	cout << endl;
 
 	st.insere((MyString) "mundo", 1);
-	cout << st.devolve((MyString) "mundo") << endl;
+	cout << "devolve(mundo) = " << st.devolve((MyString) "mundo") << endl;
 
 	st.imprime();
 	cout << endl;
 
 	st.insere((MyString) "aaa", 2);
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
 	st.insere((MyString) "aba", 2);
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
 	st.insere((MyString) "aab", 2);
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
 	st.insere((MyString) "baa", 2);
 	st.imprime();
 	cout << endl;
 
-	st.remove((MyString) "a");
+	st.insere((MyString) "mx", 3);
 	st.imprime();
 	cout << endl;
+
+	st.insere((MyString) "casa", 110);
+	st.imprime();
+	cout << endl;
+
+	// st.remove((MyString) "a");
+	// st.imprime();
+	// cout << endl;
 
 	// st.remove((MyString) "aaa");
 	// st.imprime();
@@ -154,13 +164,13 @@ void testeInicial() {
 	// st.imprime();
 	// cout << endl;
 
-	st.remove((MyString) "aba");
-	st.imprime();
-	cout << endl;
+	// st.remove((MyString) "aba");
+	// st.imprime();
+	// cout << endl;
 
-	st.remove((MyString) "ola");
-	st.imprime();
-	cout << endl;
+	// st.remove((MyString) "ola");
+	// st.imprime();
+	// cout << endl;
 
 	// st.remove((MyString) "baa");
 	// st.imprime();
@@ -170,9 +180,9 @@ void testeInicial() {
 	// st.imprime();
 	// cout << endl;
 
-	st.remove((MyString) "sei lá");
-	st.imprime();
-	cout << endl;
+	// st.remove((MyString) "sei lá");
+	// st.imprime();
+	// cout << endl;
 
 	// st.imprime();
 	// cout << endl;
