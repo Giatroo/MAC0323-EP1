@@ -7,5 +7,5 @@ all : main
 	# mv *.gch ${OBJ}
 	@echo "Compilado corretamente"
 
-main : main.cpp chaveItem.hpp symbolTable.hpp vector.hpp list.hpp arvoreBinaria.hpp treap.hpp tree23.hpp redblack.hpp
+main : main.cpp chaveItem.hpp symbolTable.hpp arvoreBinaria.hpp list.hpp redblack.hpp treap.hpp tree23.hpp vector.hpp
 	${CC} ${FLAGS} $^ -o $@

@@ -9,6 +9,8 @@
 #include "chaveItem.hpp"
 #include "symbolTable.hpp"
 
+using namespace std;
+
 // DECLARAÇÃO DAS CLASSES
 
 template <typename Chave = MyString, typename Item = int>
@@ -51,6 +53,7 @@ class rb_tree : public SymbolTable<Chave, Item> {
 
 	// Função que acha o menor elemento da árvore dada
 	no_rb<Chave, Item> *achaMin(no_rb<Chave, Item> *);
+	no_rb<Chave, Item> *achaMax(no_rb<Chave, Item> *);
 
 	// Função que dado um nó duplo preto e seu pai, faz as correções necessárias
 	// (Precisamos passar o pai para caso o duplo preto seja nulo)
@@ -142,7 +145,7 @@ void rb_tree<Chave, Item>::deleteArvore(no_rb<Chave, Item> *raiz) {
 
 template <typename Chave, typename Item>
 no_rb<Chave, Item> *rb_tree<Chave, Item>::rotEsq(no_rb<Chave, Item> *raiz) {
-	if (raiz == nullptr || raiz->esq == nullptr) return nullptr;
+	if (raiz == nullptr || raiz->esq == nullptr) return raiz;
 
 	no_rb<Chave, Item> *temp = raiz->esq;
 	raiz->esq = temp->dir;
@@ -158,7 +161,7 @@ no_rb<Chave, Item> *rb_tree<Chave, Item>::rotEsq(no_rb<Chave, Item> *raiz) {
 
 template <typename Chave, typename Item>
 no_rb<Chave, Item> *rb_tree<Chave, Item>::rotDir(no_rb<Chave, Item> *raiz) {
-	if (raiz == nullptr || raiz->dir == nullptr) return nullptr;
+	if (raiz == nullptr || raiz->dir == nullptr) return raiz;
 
 	no_rb<Chave, Item> *temp = raiz->dir;
 	raiz->dir = temp->esq;
@@ -350,28 +353,42 @@ void rb_tree<Chave, Item>::removeRecursivo(no_rb<Chave, Item> *it, Chave chave, 
 		// Caso 1: é uma folha
 		if (it->esq == nullptr && it->dir == nullptr) {
 			no_rb<Chave, Item> *pai = it->pai;
+			bool red = it->red;
+
+			if (pai == nullptr)
+				raiz = nullptr;
+			else if (pai->esq == it)
+				pai->esq = nullptr;
+			else
+				pai->dir = nullptr;
+
 			delete it;
-			it = nullptr;
-			if (pai == nullptr) raiz = nullptr;
-			if (pai != nullptr && !pai->red) corrigeRemove(it, pai);
+
+			if (!red) corrigeRemove(nullptr, pai);
 		}
 		// Caso 2: é nó interno
 		else {
 			// Procuramos a menor chave na subárvore direita
 			// (o próximo inordem)
-			no_rb<Chave, Item> *temp = achaMin(it->dir);
+			no_rb<Chave, Item> *mini = achaMin(it->dir);
+			no_rb<Chave, Item> *maxi = achaMax(it->esq);
+			no_rb<Chave, Item> *temp = (mini == nullptr ? maxi : mini);
+			bool esq = (mini == nullptr);
 			// Sabemos que ele existe, pois it tem dois filhos
 
 			// Colocamos o próximo inordem no lugar no do que queríamos remover
 			*it->node = *temp->node;
-			it->numNosDir--;
+			if (esq)
+				it->numNosEsq--;
+			else
+				it->numNosDir--;
 
 			// E agora o nosso problema é remover o nó do próximo inordem
 			// Torcemos para que a remoção se reduza a ou o caso 1 ou o caso 2
 			// mas se novamente cairmos no caso 3, vamos novamente ter que fazer
 			// o processo de substituir um nó pelo próximo inordem e chamar
 			// recursivamente a função de remover
-			removeRecursivo(it->dir, temp->node->chave, achou);
+			removeRecursivo((esq ? it->esq : it->dir), temp->node->chave, achou);
 			// (nesse caso, 'achou' é indiferente, pois, como já falei, temos certeza
 			// de que essa chave existe na nossa árvore)
 			// (ou seja, 'achou' continua como true)
@@ -383,61 +400,97 @@ template <typename Chave, typename Item>
 void rb_tree<Chave, Item>::corrigeRemove(no_rb<Chave, Item> *dp, no_rb<Chave, Item> *pai) {
 	// Irmão é o outro filho do pai, x é o filho do irmão mais próximo do duplo preto e y é o outro
 	// Dessa forma, tratamos casos simétricos da mesma forma
-	no_rb<Chave, Item> *irmao, *x, *y;
-	bool esq; // Diz se dp está à esquerda do pai (para sabermos qual o caso simétrico estamos)
+	no_rb<Chave, Item> *irmao, *x, *y, *avo;
+	bool esqPai; // Diz se dp está à esquerda do pai (para sabermos qual o caso simétrico estamos)
+	bool esqAvo; // Diz se o pai está à esquerda do avô
 	if (dp != nullptr) pai = dp->pai;
 
 	// 1) dp = raiz
 	if (pai == nullptr || dp == this->raiz) return; // Está resolvido
 
-	esq = pai->esq == dp;
-	irmao = esq ? pai->dir : pai->esq;
-	x = esq ? irmao->esq : irmao->dir;
-	y = esq ? irmao->dir : irmao->esq;
+	esqPai = dp == pai->esq;
+	irmao = esqPai ? pai->dir : pai->esq;
+	x = esqPai ? irmao->esq : irmao->dir;
+	y = esqPai ? irmao->dir : irmao->esq;
+	avo = pai->pai;
+	esqAvo = (avo != nullptr && avo->esq == pai);
 
 	// Agora vamos dividir em cinco casos:
 
 	// 2) irmão vermelho, resto preto
-	if (!pai->red && irmao->red && !x->red && !y->red) {
+	if (!pai->red && irmao->red && (x == nullptr || !x->red) && (y == nullptr || !y->red)) {
 		pai->red ^= 1;
 		irmao->red ^= 1;
-		if (esq)
+		if (esqPai)
 			rotDir(pai);
 		else
 			rotEsq(pai);
-		if (irmao->pai == nullptr) this->raiz = irmao;
+		if (avo == nullptr) {
+			this->raiz = irmao;
+			irmao->red = 0;
+		} else {
+			if (esqAvo) {
+				avo->esq = irmao;
+				avo->numNosEsq = irmao->numNosEsq + irmao->numNosDir + 1;
+			} else {
+				avo->dir = irmao;
+				avo->numNosDir = irmao->numNosEsq + irmao->numNosDir + 1;
+			}
+		}
 		corrigeRemove(dp, pai);
 	}
 	// 3) todos pretos
-	else if (!pai->red && !irmao->red && !x->red && !y->red) {
+	else if (!pai->red && !irmao->red && (x == nullptr || !x->red) && (y == nullptr || !y->red)) {
 		irmao->red ^= 1;
 		corrigeRemove(pai, pai->pai);
 	}
 	// 4) pai vermelho, resto preto
-	else if (pai->red && !irmao->red && !x->red && !y->red) {
+	else if (pai->red && !irmao->red && (x == nullptr || !x->red) && (y == nullptr || !y->red)) {
 		pai->red ^= 1;
 		irmao->red ^= 1;
 	}
 	// 5) irmao preto, x vermelho, y preto e pai qualquer cor
-	else if (!irmao->red && x->red && !y->red) {
+	else if (!irmao->red && (x != nullptr && x->red) && (y == nullptr || !y->red)) {
 		irmao->red ^= 1;
 		x->red ^= 1;
-		if (esq)
-			rotEsq(irmao);
-		else
-			rotDir(irmao);
+		if (esqPai) {
+			pai->dir = rotEsq(irmao);
+			if (pai->dir == nullptr)
+				pai->numNosDir = 0;
+			else
+				pai->numNosDir = pai->dir->numNosEsq + pai->dir->numNosEsq + 1;
+
+		} else {
+			pai->esq = rotDir(irmao);
+			if (pai->esq == nullptr)
+				pai->numNosEsq = 0;
+			else
+				pai->numNosEsq = pai->esq->numNosEsq + pai->esq->numNosEsq + 1;
+		}
 		corrigeRemove(dp, pai); // Vamos cair no caso 6
 	}
 	// 6) irmao preto, y vermelho, resto qualquer cor
-	else if (!irmao->red && y->red) {
+	else if (!irmao->red && (y != nullptr && y->red)) {
 		irmao->red = pai->red;
 		y->red ^= 1;
 		pai->red = 0;
-		if (esq)
+		if (esqPai)
 			rotDir(pai);
 		else
 			rotEsq(pai);
-		if (irmao->pai == nullptr) this->raiz = irmao;
+
+		if (avo == nullptr) {
+			this->raiz = irmao;
+			irmao->red = 0;
+		} else {
+			if (esqAvo) {
+				avo->esq = irmao;
+				avo->numNosEsq = irmao->numNosEsq + irmao->numNosDir + 1;
+			} else {
+				avo->dir = irmao;
+				avo->numNosDir = irmao->numNosEsq + irmao->numNosDir + 1;
+			}
+		}
 	}
 }
 
@@ -447,6 +500,15 @@ no_rb<Chave, Item> *rb_tree<Chave, Item>::achaMin(no_rb<Chave, Item> *it) {
 	// posível
 
 	while (it != nullptr && it->esq != nullptr) it = it->esq;
+	return it; // Ao final, temos o menor elemento da árvore
+}
+
+template <typename Chave, typename Item>
+no_rb<Chave, Item> *rb_tree<Chave, Item>::achaMax(no_rb<Chave, Item> *it) {
+	// Para achar o menor elemento de uma árvore, basta ir para a esquerda o máximo
+	// posível
+
+	while (it != nullptr && it->dir != nullptr) it = it->dir;
 	return it; // Ao final, temos o menor elemento da árvore
 }
 
