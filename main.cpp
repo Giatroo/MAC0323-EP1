@@ -31,8 +31,6 @@ void testeAleatorizado(int num_op);
 
 int main(int argc, const char **argv) {
 	teste();
-	// testeSplit();
-	// testeInsere();
 
 	return 0;
 }
@@ -50,25 +48,22 @@ void teste() {
 	// st.imprime();
 }
 void testeInicial() {
-	st.imprime();
-	cout << endl;
-	// st.remove((MyString) "a");
-	// st.remove((MyString) "b");
+	st.remove((MyString) "a");
+	st.remove((MyString) "b");
 	st.insere((MyString) "a", 1);
-	// st.remove((MyString) "a");
+	st.remove((MyString) "a");
 
 	st.insere((MyString) "ola", 1);
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
-	cout << "Inserindo mundo" << endl;
 	st.insere((MyString) "mundo", 2);
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
 	st.insere((MyString) "sei lá", 10);
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
 	st.insere((MyString) "outra palavra", -23);
 	st.imprime();
@@ -82,8 +77,8 @@ void testeInicial() {
 	cout << "devolve(b) = " << st.devolve((MyString) "b") << endl;
 	cout << endl;
 
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
 	cout << "rank(ola) = " << st.rank((MyString) "ola") << endl;
 	cout << "rank(sei lá) = " << st.rank((MyString) "sei lá") << endl;
@@ -95,8 +90,8 @@ void testeInicial() {
 	cout << "rank(zzzz) = " << st.rank((MyString) "zzzz") << endl;
 	cout << endl;
 
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
 	cout << "seleciona(4) = " << st.seleciona(4) << endl;
 	cout << "seleciona(3) = " << st.seleciona(3) << endl;
@@ -104,10 +99,10 @@ void testeInicial() {
 	cout << "seleciona(1) = " << st.seleciona(1) << endl;
 	cout << "seleciona(0) = " << st.seleciona(0) << endl;
 
-	// st.remove((MyString) "outra palavra");
-	// cout << endl;
+	st.remove((MyString) "outra palavra");
+	cout << endl;
 
-	// st.imprime();
+	st.imprime();
 	cout << endl;
 
 	cout << "seleciona(7) = " << st.seleciona(7) << endl;
@@ -148,44 +143,44 @@ void testeInicial() {
 	st.imprime();
 	cout << endl;
 
-	// st.remove((MyString) "a");
-	// st.imprime();
-	// cout << endl;
+	st.remove((MyString) "a");
+	st.imprime();
+	cout << endl;
 
-	// st.remove((MyString) "aaa");
-	// st.imprime();
-	// cout << endl;
+	st.remove((MyString) "aaa");
+	st.imprime();
+	cout << endl;
 
-	// st.remove((MyString) "aab");
-	// st.imprime();
-	// cout << endl;
+	st.remove((MyString) "aab");
+	st.imprime();
+	cout << endl;
 
-	// st.remove((MyString) "mundo");
-	// st.imprime();
-	// cout << endl;
+	st.remove((MyString) "mundo");
+	st.imprime();
+	cout << endl;
 
-	// st.remove((MyString) "aba");
-	// st.imprime();
-	// cout << endl;
+	st.remove((MyString) "aba");
+	st.imprime();
+	cout << endl;
 
-	// st.remove((MyString) "ola");
-	// st.imprime();
-	// cout << endl;
+	st.remove((MyString) "ola");
+	st.imprime();
+	cout << endl;
 
-	// st.remove((MyString) "baa");
-	// st.imprime();
-	// cout << endl;
+	st.remove((MyString) "baa");
+	st.imprime();
+	cout << endl;
 
-	// st.remove((MyString) "aba");
-	// st.imprime();
-	// cout << endl;
+	st.remove((MyString) "aba");
+	st.imprime();
+	cout << endl;
 
-	// st.remove((MyString) "sei lá");
-	// st.imprime();
-	// cout << endl;
+	st.remove((MyString) "sei lá");
+	st.imprime();
+	cout << endl;
 
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 }
 void testeInsere(int num_op) {
 	clock_t start, end;
