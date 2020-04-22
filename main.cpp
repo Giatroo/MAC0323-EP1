@@ -1,5 +1,6 @@
 #include <iostream>
 #include "arvoreBinaria.hpp"
+#include "hashtable.hpp"
 #include "list.hpp"
 #include "redblack.hpp"
 #include "treap.hpp"
@@ -8,7 +9,7 @@
 
 using namespace std;
 
-rb_tree<> st;
+hashtable<> st;
 
 MyString randomWord() {
 	string a = "";
@@ -41,10 +42,10 @@ void teste() {
 	testeInicial();
 	testeInsere(1000000);
 	testeRank(100000);
-	testeSeleciona(1000000);
+	// testeSeleciona(100);
 	testeDevolve(1000000);
 	testeRemove(1000000);
-	testeAleatorizado(5000000);
+	testeAleatorizado(200000);
 	// st.imprime();
 }
 void testeInicial() {
@@ -69,35 +70,35 @@ void testeInicial() {
 	st.imprime();
 	cout << endl;
 
-	// cout << "devolve(ola) = " << st.devolve((MyString) "ola") << endl;
-	// cout << "devolve(mundo) = " << st.devolve((MyString) "mundo") << endl;
-	// cout << endl;
+	cout << "devolve(ola) = " << st.devolve((MyString) "ola") << endl;
+	cout << "devolve(mundo) = " << st.devolve((MyString) "mundo") << endl;
+	cout << endl;
 
-	// cout << "devolve(a) = " << st.devolve((MyString) "a") << endl;
-	// cout << "devolve(b) = " << st.devolve((MyString) "b") << endl;
-	// cout << endl;
+	cout << "devolve(a) = " << st.devolve((MyString) "a") << endl;
+	cout << "devolve(b) = " << st.devolve((MyString) "b") << endl;
+	cout << endl;
 
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
-	// cout << "rank(ola) = " << st.rank((MyString) "ola") << endl;
-	// cout << "rank(sei lá) = " << st.rank((MyString) "sei lá") << endl;
-	// cout << "rank(outra palavra) = " << st.rank((MyString) "outra palavra") << endl;
-	// cout << "rank(mundo) = " << st.rank((MyString) "mundo") << endl;
-	// cout << endl;
-	// cout << "rank(a) = " << st.rank((MyString) "a") << endl;
-	// cout << "rank(n) = " << st.rank((MyString) "n") << endl;
-	// cout << "rank(zzzz) = " << st.rank((MyString) "zzzz") << endl;
-	// cout << endl;
+	cout << "rank(ola) = " << st.rank((MyString) "ola") << endl;
+	cout << "rank(sei lá) = " << st.rank((MyString) "sei lá") << endl;
+	cout << "rank(outra palavra) = " << st.rank((MyString) "outra palavra") << endl;
+	cout << "rank(mundo) = " << st.rank((MyString) "mundo") << endl;
+	cout << endl;
+	cout << "rank(a) = " << st.rank((MyString) "a") << endl;
+	cout << "rank(n) = " << st.rank((MyString) "n") << endl;
+	cout << "rank(zzzz) = " << st.rank((MyString) "zzzz") << endl;
+	cout << endl;
 
-	// st.imprime();
-	// cout << endl;
+	st.imprime();
+	cout << endl;
 
-	// cout << "seleciona(4) = " << st.seleciona(4) << endl;
-	// cout << "seleciona(3) = " << st.seleciona(3) << endl;
-	// cout << "seleciona(2) = " << st.seleciona(2) << endl;
-	// cout << "seleciona(1) = " << st.seleciona(1) << endl;
-	// cout << "seleciona(0) = " << st.seleciona(0) << endl;
+	cout << "seleciona(4) = " << st.seleciona(4) << endl;
+	cout << "seleciona(3) = " << st.seleciona(3) << endl;
+	cout << "seleciona(2) = " << st.seleciona(2) << endl;
+	cout << "seleciona(1) = " << st.seleciona(1) << endl;
+	cout << "seleciona(0) = " << st.seleciona(0) << endl;
 
 	st.remove((MyString) "outra palavra");
 	cout << endl;
@@ -105,39 +106,39 @@ void testeInicial() {
 	st.imprime();
 	cout << endl;
 
-	// cout << "seleciona(7) = " << st.seleciona(7) << endl;
-	// cout << "seleciona(3) = " << st.seleciona(3) << endl;
-	// cout << "seleciona(2) = " << st.seleciona(2) << endl;
-	// cout << "seleciona(1) = " << st.seleciona(1) << endl;
-	// cout << "seleciona(0) = " << st.seleciona(0) << endl;
-	// cout << "seleciona(-3) = " << st.seleciona(-3) << endl;
-	// cout << endl;
+	cout << "seleciona(7) = " << st.seleciona(7) << endl;
+	cout << "seleciona(3) = " << st.seleciona(3) << endl;
+	cout << "seleciona(2) = " << st.seleciona(2) << endl;
+	cout << "seleciona(1) = " << st.seleciona(1) << endl;
+	cout << "seleciona(0) = " << st.seleciona(0) << endl;
+	cout << "seleciona(-3) = " << st.seleciona(-3) << endl;
+	cout << endl;
 
 	st.insere((MyString) "mundo", 1);
-	// cout << "devolve(mundo) = " << st.devolve((MyString) "mundo") << endl;
+	cout << "devolve(mundo) = " << st.devolve((MyString) "mundo") << endl;
 
+	st.imprime();
+	cout << endl;
+
+	st.insere((MyString) "aaa", 2);
 	// st.imprime();
 	// cout << endl;
 
-	st.insere((MyString) "aaa", 2);
-	st.imprime();
-	cout << endl;
-
 	st.insere((MyString) "aba", 2);
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
 	st.insere((MyString) "aab", 2);
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
 	st.insere((MyString) "baa", 2);
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
 	st.insere((MyString) "mx", 3);
-	st.imprime();
-	cout << endl;
+	// st.imprime();
+	// cout << endl;
 
 	st.insere((MyString) "casa", 110);
 	st.imprime();
@@ -147,46 +148,44 @@ void testeInicial() {
 	st.imprime();
 	cout << endl;
 
-	cout << "Removendo aaa" << endl;
 	st.remove((MyString) "aaa");
-	st.imprime();
-	cout << endl;
-
-	cout << "Removendo aab" << endl;
-	st.remove((MyString) "aab");
-	st.imprime();
-	cout << endl;
-
-	st.remove((MyString) "mundo");
-	st.imprime();
-	cout << endl;
-
-	st.remove((MyString) "aba");
-	st.imprime();
-	cout << endl;
-
-	st.remove((MyString) "ola");
-	st.imprime();
-	cout << endl;
-
-	st.remove((MyString) "baa");
-	st.imprime();
-	cout << endl;
-
-	st.remove((MyString) "aba");
-	st.imprime();
-	cout << endl;
-
-	st.remove((MyString) "sei lá");
-	st.imprime();
-	cout << endl;
-
-	st.remove((MyString) "mx");
-	st.imprime();
-	cout << endl;
-
 	// st.imprime();
 	// cout << endl;
+
+	st.remove((MyString) "aab");
+	// st.imprime();
+	// cout << endl;
+
+	st.remove((MyString) "mundo");
+	// st.imprime();
+	// cout << endl;
+
+	st.remove((MyString) "aba");
+	// st.imprime();
+	// cout << endl;
+
+	st.remove((MyString) "ola");
+	// st.imprime();
+	// cout << endl;
+
+	st.remove((MyString) "baa");
+	// st.imprime();
+	// cout << endl;
+
+	st.remove((MyString) "aba");
+	// st.imprime();
+	// cout << endl;
+
+	st.remove((MyString) "sei lá");
+	// st.imprime();
+	// cout << endl;
+
+	st.remove((MyString) "mx");
+	// st.imprime();
+	// cout << endl;
+
+	st.imprime();
+	cout << endl;
 }
 void testeInsere(int num_op) {
 	clock_t start, end;
@@ -249,6 +248,7 @@ void testeSeleciona(int num_op) {
 
 	start = clock();
 	for (int i = 0; i < num_op; i++) st.seleciona(rand() % num_op);
+
 	end = clock();
 
 	elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
