@@ -4,6 +4,7 @@
 #define HASH_TABLE_H
 
 #include <iostream>
+
 #include "chaveItem.hpp"
 #include "symbolTable.hpp"
 

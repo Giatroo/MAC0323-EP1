@@ -2,6 +2,7 @@
 #define _LIST_H
 
 #include <iostream>
+
 #include "chaveItem.hpp"
 #include "symbolTable.hpp"
 
@@ -20,7 +21,7 @@ class no_lista {
 };
 
 template <typename Chave = MyString, typename Item = int>
-class lista : SymbolTable<Chave, Item> {
+class lista : public SymbolTable<Chave, Item> {
   public:
 	no_lista<Chave, Item> *cabeca; // Nó dummy inicial
 	no_lista<Chave, Item> *calda;  // Nó dummy final
@@ -36,7 +37,7 @@ class lista : SymbolTable<Chave, Item> {
 };
 
 template <typename Chave = MyString, typename Item = int>
-class lista_ordenada : SymbolTable<Chave, Item> {
+class lista_ordenada : public SymbolTable<Chave, Item> {
   public:
 	no_lista<Chave, Item> *cabeca; // Nó dummy inicial
 	no_lista<Chave, Item> *calda;  // Nó dummy final
@@ -54,8 +55,7 @@ class lista_ordenada : SymbolTable<Chave, Item> {
 // IMPLEMENTAÇÃO NO_LISTA
 
 template <typename Chave, typename Item>
-no_lista<Chave, Item>::no_lista()
-    : node(new Par<Chave, Item>()), ant(nullptr), prox(nullptr) {}
+no_lista<Chave, Item>::no_lista() : node(new Par<Chave, Item>()), ant(nullptr), prox(nullptr) {}
 
 template <typename Chave, typename Item>
 no_lista<Chave, Item>::no_lista(Par<Chave, Item> p) : ant(nullptr), prox(nullptr) {

@@ -5,6 +5,7 @@
 #define _ARVORE23_H
 
 #include <iostream>
+
 #include "chaveItem.hpp"
 #include "symbolTable.hpp"
 

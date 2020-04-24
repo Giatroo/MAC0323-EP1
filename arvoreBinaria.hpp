@@ -5,6 +5,7 @@
 #define _ARVORE_BINARIA_H
 
 #include <iostream>
+
 #include "chaveItem.hpp"
 #include "symbolTable.hpp"
 
@@ -170,8 +171,8 @@ void arvore_binaria<Chave, Item>::remove(Chave chave) {
 }
 
 template <typename Chave, typename Item>
-no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::removeRecursivo(
-    no_arvore<Chave, Item> *it, Chave chave, bool &achou) {
+no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::removeRecursivo(no_arvore<Chave, Item> *it,
+                                                                     Chave chave, bool &achou) {
 	// Se é nulo
 	if (it == nullptr) {
 		// Chegamos aqui ou se a raiz era nula ou se descemos nossa árvore e ela não
@@ -246,8 +247,7 @@ no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::removeRecursivo(
 }
 
 template <typename Chave, typename Item>
-no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::achaMin(
-    no_arvore<Chave, Item> *it) {
+no_arvore<Chave, Item> *arvore_binaria<Chave, Item>::achaMin(no_arvore<Chave, Item> *it) {
 	// Para achar o menor elemento de uma árvore, basta ir para a esquerda o máximo
 	// posível
 

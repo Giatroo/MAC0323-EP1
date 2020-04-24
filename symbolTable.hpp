@@ -6,6 +6,7 @@
  */
 template <typename Chave, typename Item>
 class SymbolTable {
+  public:
 	virtual void insere(Chave chave, Item valor) = 0;
 	virtual Item devolve(Chave chave) = 0;
 	virtual void remove(Chave chave) = 0;

@@ -5,6 +5,7 @@
 #define VECTOR_H
 
 #include <iostream>
+
 #include "chaveItem.hpp"
 #include "symbolTable.hpp"
 
@@ -50,8 +51,7 @@ class vetor_ordenado : public SymbolTable<Chave, Item> {
 // IMPLEMENTAÇÃO VETOR
 
 template <typename Chave, typename Item>
-vetor<Chave, Item>::vetor()
-    : v(new Par<Chave, Item>[ 10 ]), capacidade(10), numElem(0) {}
+vetor<Chave, Item>::vetor() : v(new Par<Chave, Item>[10]), capacidade(10), numElem(0) {}
 
 template <typename Chave, typename Item>
 vetor<Chave, Item>::~vetor() {
@@ -61,7 +61,7 @@ vetor<Chave, Item>::~vetor() {
 
 template <typename Chave, typename Item>
 void vetor<Chave, Item>::resize() {
-	Par<Chave, Item> *novo = new Par<Chave, Item>[ 2 * capacidade ];
+	Par<Chave, Item> *novo = new Par<Chave, Item>[2 * capacidade];
 	for (int i = 0; i < capacidade; i++) novo[i] = v[i];
 	delete[] v;
 	v = novo;
@@ -123,7 +123,7 @@ Chave vetor<Chave, Item>::seleciona(int k) {
 
 template <typename Chave, typename Item>
 void vetor<Chave, Item>::imprime() {
-	std::cout << "Vetor: [\n";
+	std::cout << "Vetor desordenado: [\n";
 	for (int i = 0; i < this->numElem; i++) std::cout << v[i] << "\n";
 	std::cout << "]" << std::endl;
 }
@@ -132,7 +132,7 @@ void vetor<Chave, Item>::imprime() {
 
 template <typename Chave, typename Item>
 vetor_ordenado<Chave, Item>::vetor_ordenado()
-    : v(new Par<Chave, Item>[ 10 ]), capacidade(10), numElem(0) {}
+    : v(new Par<Chave, Item>[10]), capacidade(10), numElem(0) {}
 
 template <typename Chave, typename Item>
 vetor_ordenado<Chave, Item>::~vetor_ordenado() {
@@ -142,7 +142,7 @@ vetor_ordenado<Chave, Item>::~vetor_ordenado() {
 
 template <typename Chave, typename Item>
 void vetor_ordenado<Chave, Item>::resize() {
-	Par<Chave, Item> *novo = new Par<Chave, Item>[ 2 * capacidade ];
+	Par<Chave, Item> *novo = new Par<Chave, Item>[2 * capacidade];
 	for (int i = 0; i < capacidade; i++) novo[i] = v[i];
 	delete[] v;
 	v = novo;
@@ -253,7 +253,7 @@ Chave vetor_ordenado<Chave, Item>::seleciona(int k) {
 
 template <typename Chave, typename Item>
 void vetor_ordenado<Chave, Item>::imprime() {
-	std::cout << "Vetor: [\n";
+	std::cout << "Vetor ordenado: [\n";
 	for (int i = 0; i < this->numElem; i++) std::cout << v[i] << "\n";
 	std::cout << "]" << std::endl;
 }

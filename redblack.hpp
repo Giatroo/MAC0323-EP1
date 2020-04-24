@@ -6,6 +6,7 @@
 #define _REDBLACK_H
 
 #include <iostream>
+
 #include "chaveItem.hpp"
 #include "symbolTable.hpp"
 
@@ -571,8 +572,8 @@ void rb_tree<Chave, Item>::imprimeRecursivo(no_rb<Chave, Item> *raiz) {
 
 		// Imprimimos in-ordem
 		imprimeRecursivo(raiz->esq);
-		raiz->debug();
-		// std::cout << *raiz->node << " Vermelha = " << raiz->red << std::endl;
+		// raiz->debug();
+		std::cout << *raiz->node << " Vermelha = " << raiz->red << std::endl;
 		imprimeRecursivo(raiz->dir);
 	}
 }

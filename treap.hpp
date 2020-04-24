@@ -5,6 +5,7 @@
 #define _TREAP_H
 
 #include <iostream>
+
 #include "chaveItem.hpp"
 #include "symbolTable.hpp"
 
@@ -37,8 +38,7 @@ class treap : public SymbolTable<Chave, Item> {
 	void imprimeRecursivo(no_treap<Chave, Item> *);
 
 	// Função auxiliar do insere
-	no_treap<Chave, Item> *insereRecursivo(no_treap<Chave, Item> *, Chave, Item,
-	                                       bool &);
+	no_treap<Chave, Item> *insereRecursivo(no_treap<Chave, Item> *, Chave, Item, bool &);
 
 	// Função auxiliar do remove
 	no_treap<Chave, Item> *removeRecursivo(no_treap<Chave, Item> *, Chave, bool &);
@@ -140,8 +140,8 @@ void treap<Chave, Item>::insere(Chave chave, Item valor) {
 }
 
 template <typename Chave, typename Item>
-no_treap<Chave, Item> *treap<Chave, Item>::insereRecursivo(
-    no_treap<Chave, Item> *raiz, Chave chave, Item valor, bool &achou) {
+no_treap<Chave, Item> *treap<Chave, Item>::insereRecursivo(no_treap<Chave, Item> *raiz, Chave chave,
+                                                           Item valor, bool &achou) {
 	if (raiz == nullptr) {
 		raiz = new no_treap<Chave, Item>((Par<Chave, Item>){ chave, valor });
 		achou = false;
@@ -192,8 +192,7 @@ void treap<Chave, Item>::remove(Chave chave) {
 }
 
 template <typename Chave, typename Item>
-no_treap<Chave, Item> *treap<Chave, Item>::removeRecursivo(no_treap<Chave, Item> *it,
-                                                           Chave chave,
+no_treap<Chave, Item> *treap<Chave, Item>::removeRecursivo(no_treap<Chave, Item> *it, Chave chave,
                                                            bool &achou) {
 	// Se é nulo
 	if (it == nullptr) {
