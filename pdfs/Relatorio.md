@@ -331,9 +331,237 @@ Os testes foram feitos sobre uma Árvore Binária de 1.000.000 elementos.
 
 ## Treap
 
+### Insere
+
+| num_elementos |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.036319 |  3.6319e-06 |
+|    100000     | 0.412891 | 4.12891e-06 |
+|    1000000    | 5.25682  | 5.25682e-06 |
+|   10000000    | 67.5778  | 6.75778e-06 |
+
+### Remove
+
 Os testes foram feitos sobre uma Treap de 1.000.000 elementos.
 
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.049139 |  4.9139e-06 |
+|    100000     | 0.542542 | 5.42542e-06 |
+|    1000000    | 5.15544  | 5.15544e-06 |
+|   10000000    | 53.8743  | 5.38743e-06 |
 
+### Seleciona
+
+Os testes foram feitos sobre uma Treap de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.005158 |   5.158e-07 |
+|    100000     | 0.091215 |  9.1215e-07 |
+|    1000000    | 0.563671 | 5.63671e-07 |
+|   10000000    | 2.13448  | 2.13448e-07 |
+|   100000000   | 18.3263  | 1.83263e-07 |
+|  1000000000   | 172.079  | 1.72079e-07 |
+
+### Ranking
+
+Os testes foram feitos sobre uma Treap de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.026263 |  2.6263e-06 |
+|    100000     | 0.241785 | 2.41785e-06 |
+|    1000000    | 2.48796  | 2.48796e-06 |
+|   10000000    | 26.2774  | 2.62774e-06 |
+|   100000000   | 221.293  | 2.21293e-06 |
+
+### Devolve
+
+Os testes foram feitos sobre uma Treap de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.032103 |  3.2103e-06 |
+|    100000     | 0.285424 | 2.85424e-06 |
+|    1000000    | 2.87497  | 2.87497e-06 |
+|   10000000    | 29.0524  | 2.90524e-06 |
+
+## Árvore-2-3
+
+### Insere
+
+| num_elementos |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.031582 |  3.1582e-06 |
+|    100000     | 0.330305 | 3.30305e-06 |
+|    1000000    | 3.59618  | 3.59618e-06 |
+|   10000000    | 45.4071  | 4.54071e-06 |
+
+### Remove 
+
+Os testes foram feitos sobre uma Árvore-2-3 de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.059015 |  5.9015e-06 |
+|    100000     | 0.395326 | 3.95326e-06 |
+|    1000000    | 4.20119  | 4.20119e-06 |
+|   10000000    | 41.4482  | 4.14482e-06 |
+
+### Seleciona 
+
+Os testes foram feitos sobre uma Árvore-2-3 de 1.000 elementos.
+
+| num_operacoes |   tempo    | tempo médio |
+| :-----------: | :--------: | ----------: |
+|     1000      | 3.7961e-05 |   0.0321508 |
+|     10000     |  0.472186  | 4.72186e-05 |
+|    100000     |  4.67343   | 4.67343e-05 |
+|    1000000    |   47.921   |  4.7921e-05 |
+
+### Ranking 
+
+Os testes foram feitos sobre uma Árvore-2-3 de 1.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     1000      | 0.00761  |    7.61e-06 |
+|     10000     | 0.078414 |  7.8414e-06 |
+|    100000     | 0.742705 | 7.42705e-06 |
+|    1000000    |  7.4714  |  7.4714e-06 |
+|   10000000    | 75.8831  | 7.58831e-06 |
+
+### Devolve 
+
+Os testes foram feitos sobre uma Árvore-2-3 de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     1000      | 0.002388 |   2.388e-06 |
+|     10000     | 0.019237 |  1.9237e-06 |
+|    100000     | 0.17413  |  1.7413e-06 |
+|    1000000    | 1.69185  | 1.69185e-06 |
+|   10000000    | 17.8418  | 1.78418e-06 |
+|   100000000   | 187.244  | 1.87244e-06 |
+
+## Árvore Rubro-Negra
+
+### Insere
+
+| num_elementos |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.016598 |  1.6598e-06 |
+|    100000     | 0.188664 | 1.88664e-06 |
+|    1000000    | 2.14524  | 2.14524e-06 |
+|   10000000    | 26.0725  | 2.60725e-06 |
+
+### Remove 
+
+Os testes foram feitos sobre uma Árvore Rubro-Negra de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.046661 |  4.6661e-06 |
+|    100000     | 0.436381 | 4.36381e-06 |
+|    1000000    | 4.48711  | 4.48711e-06 |
+|   10000000    | 41.7653  | 4.17653e-06 |
+
+### Seleciona 
+
+Os testes foram feitos sobre uma Árvore Rubro-Negra de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|    100000     | 0.004362 |   4.717e-07 |
+|    1000000    | 0.426931 | 1.02995e-06 |
+|   10000000    | 2.44265  | 6.22457e-07 |
+|   100000000   |  20.627  | 2.32266e-07 |
+
+### Ranking 
+
+Os testes foram feitos sobre uma Árvore Rubro-Negra de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.018944 |  1.8944e-06 |
+|    100000     | 0.206772 | 2.06772e-06 |
+|    1000000    | 1.88904  | 1.88904e-06 |
+|   10000000    | 19.1315  | 1.91315e-06 |
+
+### Devolve
+
+Os testes foram feitos sobre uma Árvore Rubro-Negra de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.019152 |  1.9152e-06 |
+|    100000     | 0.18246  |  1.8246e-06 |
+|    1000000    | 1.85006  | 1.85006e-06 |
+|   10000000    |  20.048  |  2.0048e-06 |
+
+## Hashtable
+
+### Insere
+
+| num_elementos |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.009317 |   9.317e-07 |
+|    100000     | 0.108009 | 1.08009e-06 |
+|    1000000    | 1.77859  | 1.77859e-06 |
+|   10000000    | 71.6609  | 7.16609e-06 |
+
+### Remove
+
+Os testes foram feitos sobre uma Hashtable de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.04036  |   4.036e-06 |
+|    100000     | 0.360043 | 3.60043e-06 |
+|    1000000    | 4.16596  | 4.16596e-06 |
+|   10000000    | 32.2523  | 3.22523e-06 |
+
+### Seleciona
+
+Os testes foram feitos sobre uma Hashtable de 1.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|      10       | 0.161164 |   0.0161164 |
+|      100      | 2.23732  |   0.0223732 |
+|     1000      | 31.7116  |   0.0317116 |
+
+### Ranking
+
+Os testes foram feitos sobre uma Hashtable de 1.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     1000      | 0.069034 |  6.9034e-05 |
+|     10000     | 0.675127 | 6.75127e-05 |
+|    100000     | 6.48384  | 6.48384e-05 |
+|    1000000    | 67.6562  | 6.76562e-05 |
+
+Os testes foram feitos sobre uma Hashtable de 10.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     1000      | 0.310229 | 0.000310229 |
+|     10000     |  3.1682  |  0.00031682 |
+|    100000     | 32.8802  | 0.000328802 |
+
+### Devolve
+
+Os testes foram feitos sobre uma Hashtable de 1.000.000 elementos.
+
+| num_operacoes |  tempo   | tempo médio |
+| :-----------: | :------: | ----------: |
+|     10000     | 0.035394 |  3.5394e-06 |
+|    100000     | 0.30939  |  3.0939e-06 |
+|    1000000    |  2.8095  |  2.8095e-06 |
+|   10000000    | 26.7504  | 2.67504e-06 |
+|   100000000   | 244.676  | 2.44676e-06 |
 
 ## Créditos
 

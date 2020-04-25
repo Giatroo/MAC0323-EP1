@@ -28,7 +28,7 @@ void testeAleatorizado(int num_op);
 void mostreUso(char *nomePrograma);
 void testeIterativo();
 
-#define TESTES_INSERE 1e4
+#define TESTES_INSERE 1e6
 #define TESTES_REMOVE 1e4
 #define TESTES_DEVOLVE 1e5
 #define TESTES_RANK 1e3
@@ -121,10 +121,25 @@ MyString randomWord() {
 void teste() {
 	srand(time(NULL));
 
-	testeInsere(1000000);
+	testeInsere(1e6);
+
+	// for (int i = 10000; i <= 1e9; i *= 10) {
+	// 	cout << "\nTestando insere " << i << " vezes" << endl;
+	// 	testeInsere(i);
+	// 	delete st;
+	// 	st = new hashtable<MyString, int>();
+	// }
+
+	// for (int i = 10000; i <= 1e9; i *= 10) {
+	// 	testeInsere(1e6);
+	// 	cout << "\nTestando remove " << i << " vezes" << endl;
+	// 	testeRemove(i);
+	// 	delete st;
+	// 	st = new hashtable<MyString, int>();
+	// }
 
 	for (int i = 10000; i <= 1e9; i *= 10) {
-		cout << "Testando devolve " << i << " vezes" << endl;
+		cout << "\nTestando devolve " << i << " vezes" << endl;
 		testeDevolve(i);
 	}
 
